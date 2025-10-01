@@ -1,3 +1,4 @@
+/* (Mesma versão que você enviou) */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -16,10 +17,9 @@ body {
   align-items: center;
 }
 
-
 .sidebar h2 {
   margin-top: 0;
-   text-align: center;
+  text-align: center;
 }
 
 .sidebar button {
@@ -45,8 +45,6 @@ body {
   font-size: 1.2em;
   text-align: center;
 }
-
-
 
 main {
   flex-grow: 1;
@@ -151,36 +149,11 @@ table th {
   max-width: 300px;
 }
 
-#registro {
+#registro, #lista {
   display: flex;
-  flex-direction: column;   /* organiza em coluna */
-  align-items: center;      /* centraliza horizontal */
+  flex-direction: column;
+  align-items: center;
 }
-
-
-#registro h2 {
-  text-align: center;   /* centraliza o texto */
-  width: 100%;          /* ocupa toda a largura */
-  margin-bottom: 20px;  /* espaço abaixo */
-  color: #003366;
-}
-
-#lista {
-  display: flex;
-  flex-direction: column;   /* organiza em coluna */
-  align-items: center;      /* centraliza horizontal */
-}
-
-#lista h2 {
-  text-align: center;
-  width: 100%;
-  margin-bottom: 20px;
-  color: #003366;
-  font-size: 1.8em;
-  font-weight: bold;
-}
-
-
 
 footer {
   width: 100%;
