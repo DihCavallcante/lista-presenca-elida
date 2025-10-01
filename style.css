@@ -1,0 +1,224 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #003366;
+  color: white;
+  padding: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.sidebar h2 {
+  margin-top: 0;
+   text-align: center;
+}
+
+.sidebar button {
+  display: block;
+  margin: 25px 0;
+  padding: 25px;
+  width: 100%;
+  border: none;
+  background: #0055aa;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: center; 
+  transition: background 0.3s;
+}
+
+.sidebar button:hover {
+  background: #0077dd;
+}
+
+.relogio {
+  margin-top: 30px;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+
+
+main {
+  flex-grow: 1;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  background: #f4f4f4;
+}
+
+.logo-igreja {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-igreja img {
+  max-width: 180px;
+  border-radius: 8px;
+  border: 2px solid #003366;
+}
+
+.pagina {
+  display: none;
+}
+
+.pagina.ativa {
+  display: block;
+}
+
+h1 {
+  color: #003366;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 600px;
+  background: #eef;
+  padding: 15px;
+  border-radius: 10px;
+  width: 100%;
+}
+
+form input, form select, form button {
+  padding: 10px;
+  font-size: 1em;
+}
+
+form button {
+  background: #003366;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+form button:hover {
+  background: #0055aa;
+}
+
+.vinculo-container {
+  display: flex;
+  gap: 10px;
+}
+
+.filtros {
+  margin: 15px 0;
+  padding: 10px;
+  background: #eef;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+table th {
+  background: #003366;
+  color: white;
+}
+
+#config {
+  background: #eef;
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 300px;
+}
+
+#registro {
+  display: flex;
+  flex-direction: column;   /* organiza em coluna */
+  align-items: center;      /* centraliza horizontal */
+}
+
+
+#registro h2 {
+  text-align: center;   /* centraliza o texto */
+  width: 100%;          /* ocupa toda a largura */
+  margin-bottom: 20px;  /* espaço abaixo */
+  color: #003366;
+}
+
+#lista {
+  display: flex;
+  flex-direction: column;   /* organiza em coluna */
+  align-items: center;      /* centraliza horizontal */
+}
+
+#lista h2 {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
+  color: #003366;
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+
+
+footer {
+  width: 100%;
+  text-align: center;
+  padding: 15px;
+  background: #003366;
+  color: white;
+}
+
+.logos-rodape {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.logos-rodape img {
+  max-width: 60px;
+  max-height: 60px;
+  border-radius: 5px;
+  border: 1px solid white;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  body {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  main {
+    padding: 10px;
+  }
+  form {
+    max-width: 100%;
+  }
+}
