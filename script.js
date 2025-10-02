@@ -147,7 +147,10 @@ onAuthStateChanged(auth, user=>{
     userEmailSpan.textContent = user.email;
     mostrarPagina('registro');
     listarPresencas();
-  } else {
+
+     headline.textContent = 'ADB Vila Élida 28'; // <-- aqui muda o texto após login
+  
+    } else {
     authArea.classList.remove('hidden');
     presencaArea.classList.add('hidden');
     userEmailSpan.textContent = '';
@@ -168,18 +171,26 @@ window.mostrarPagina = function(id){
 
 // Registrar presença
 const formPresenca = document.getElementById('formPresenca');
-formPresenca.addEventListener('submit', async (e)=>{
+
+formPresenca.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const nome = document.getElementById('nome').value.trim();
-  const acompanhante = document.getElementById('acompanhante').value.trim();
-  const vinculo = document.getElementById('vinculo').value;
-  const vinculoExtra = document.getElementById('vinculoExtra').value.trim();
-  const tipo = document.getElementById('tipo').value;
-  const tipoExtra = document.getElementById('tipoExtra').value.trim();
-  const agora = new Date();
+
+  const formData = new FormData(formPresenca);
+  const nome = formData.get('nome')?.trim() || '';
+  const acompanhante = formData.get('acompanhante')?.trim() || '';
+  const telefone = formData.get('telefone')?.trim() || '';
+  const endereco = formData.get('endereco')?.trim() || '';
+  const vinculo = formData.get('vinculo') || '';
+  const vinculoExtra = formData.get('vinculoExtra')?.trim() || '';
+  const tipo = formData.get('tipo') || '';
+  const tipoExtra = formData.get('tipoExtra')?.trim() || '';
+
+  console.log({ nome, acompanhante, telefone, endereco, vinculo, vinculoExtra, tipo, tipoExtra });
+
   try {
+    const agora = new Date();
     await addDoc(collection(db,'presencas'), {
-      nome, acompanhante, vinculo, vinculoExtra, tipo, tipoExtra,
+      nome, acompanhante, telefone, endereco, vinculo, vinculoExtra, tipo, tipoExtra,
       data: agora.toLocaleDateString('pt-BR'),
       hora: agora.toLocaleTimeString('pt-BR')
     });
@@ -188,9 +199,11 @@ formPresenca.addEventListener('submit', async (e)=>{
     listarPresencas();
   } catch (err) {
     console.error(err);
-    alert('❌ Erro ao salvar presença');
+    alert('❌ Erro ao salvar presença: ' + (err.message || err));
   }
 });
+
+
 
 // Listar presenças
 async function listarPresencas(filtro={}){
@@ -220,6 +233,8 @@ arr.forEach(p => {
   tr.innerHTML = `
     <td>${p.nome}</td>
     <td>${p.acompanhante || ''}</td>
+    <td>${p.telefone || ''}</td>
+    <td>${p.endereco || ''}</td>
     <td>${p.vinculo}</td>
     <td>${p.vinculoExtra || ''}</td>
     <td>${p.tipo}</td>
