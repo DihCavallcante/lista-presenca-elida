@@ -120,6 +120,19 @@ footer {
   border: 1px solid white;
 }
 
+/* Flexbox compatível */
+.row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+}
+
+/* Gradiente de fundo */
+.bg {
+  background: -webkit-linear-gradient(180deg, rgba(2,35,86,0.95) 0%, rgba(7,54,99,0.95) 100%);
+  background: linear-gradient(180deg, rgba(2,35,86,0.95) 0%, rgba(7,54,99,0.95) 100%);
+}
 
 
 /* Responsivo */
