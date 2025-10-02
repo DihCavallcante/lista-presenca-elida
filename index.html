@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ADB Vila Élida — Presença</title>
   <link rel="stylesheet" href="style.css">
+ <link rel="icon" type="image/png" href="logo.png">
+
 </head>
 <body>
 
@@ -58,25 +60,30 @@
           <section id="registro" class="pagina ativa">
             <h2>Registrar Presença</h2>
             <form id="formPresenca" class="form">
-              <input id="nome" placeholder="Nome" required />
-              <input id="acompanhante" placeholder="Acompanhante (opcional)" />
+             <input id="nome" name="nome" placeholder="Nome" required />
+              <input id="acompanhante" name="acompanhante" placeholder="Acompanhante (opcional)" />
+                <input id="telefone" name="telefone" type="tel" placeholder="Telefone" />
+<input id="endereco" name="endereco" type="text" placeholder="Endereço" />
               <div class="row">
-                <select id="vinculo" required>
-                  <option value="">Selecione o vínculo</option>
-                  <option>Congregação</option>
-                  <option>Outra religião</option>
-                  <option>Sem igreja</option>
-                </select>
-                <input id="vinculoExtra" placeholder="Detalhes" />
-              </div>
-            <div class="row">
-  <select id="tipo" required>
-    <option>Convidado(a) por</option>
-    <option>Visitante</option>
-    <option>Membro</option>
+  <select id="vinculo" name="vinculo" required>
+    <option value="" disabled selected>Selecione</option>
+    <option value="Congregacao">Congregação</option>
+    <option value="OutraReligiao">Outra religião</option>
+    <option value="SemIgreja">Sem igreja</option>
   </select>
-  <input id="tipoExtra" placeholder="Detalhes" />
+  <input id="vinculoExtra" name="vinculoExtra" placeholder="Detalhes" />
 </div>
+
+<div class="row">
+  <select id="tipo" name="tipo" required>
+    <option value="" disabled selected>Selecione</option>
+    <option value="Convidado">Convidado(a) por</option>
+    <option value="Visitante">Visitante</option>
+    <option value="Membro">Membro</option>
+  </select>
+  <input id="tipoExtra" name="tipoExtra" placeholder="Detalhes" />
+</div>
+
               <button type="submit" class="btn primary">Salvar Presença</button>
             </form>
           </section>
@@ -95,7 +102,18 @@
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr><th>Nome</th><th>Acompanhante</th><th>Vínculo</th><th>Detalhes</th><th>Tipo</th><th>Detalhe Extra</th><th>Data</th><th>Hora</th></tr>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Acompanhante</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Vínculo</th>
+                    <th>Detalhes</th>
+                    <th>Tipo</th>
+                    <th>Detalhe Extra</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                  </tr>
                 </thead>
                 <tbody id="tabelaPresencas"></tbody>
               </table>
