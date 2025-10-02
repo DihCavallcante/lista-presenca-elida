@@ -1,3 +1,4 @@
+
 // Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -174,10 +175,11 @@ formPresenca.addEventListener('submit', async (e)=>{
   const vinculo = document.getElementById('vinculo').value;
   const vinculoExtra = document.getElementById('vinculoExtra').value.trim();
   const tipo = document.getElementById('tipo').value;
+  const tipoExtra = document.getElementById('tipoExtra').value.trim();
   const agora = new Date();
   try {
     await addDoc(collection(db,'presencas'), {
-      nome, acompanhante, vinculo, vinculoExtra, tipo,
+      nome, acompanhante, vinculo, vinculoExtra, tipo, tipoExtra,
       data: agora.toLocaleDateString('pt-BR'),
       hora: agora.toLocaleTimeString('pt-BR')
     });
@@ -213,12 +215,21 @@ async function listarPresencas(filtro={}){
     if(filtro.ano) {
       arr = arr.filter(p => p.data.split('/')[2] === filtro.ano);
     }
+arr.forEach(p => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${p.nome}</td>
+    <td>${p.acompanhante || ''}</td>
+    <td>${p.vinculo}</td>
+    <td>${p.vinculoExtra || ''}</td>
+    <td>${p.tipo}</td>
+    <td>${p.tipoExtra || ''}</td> <!-- Coluna nova -->
+    <td>${p.data}</td>
+    <td>${p.hora}</td>
+  `;
+  tbody.appendChild(tr);
+});
 
-    arr.forEach(p => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${p.nome}</td><td>${p.acompanhante||''}</td><td>${p.vinculo}</td><td>${p.vinculoExtra||''}</td><td>${p.tipo}</td><td>${p.data}</td><td>${p.hora}</td>`;
-      tbody.appendChild(tr);
-    });
     document.getElementById('contador').textContent = `Total: ${arr.length}`;
   } catch (err) {
     console.error(err);
@@ -253,18 +264,26 @@ setInterval(atualizarHora, 1000);
 atualizarHora();
 
 // --- Seletor de fontes ---
-const fonteSelect = document.createElement('select');
-fonteSelect.id = 'seletor-fontes';
-['Inter','Arial','Verdana','Tahoma','Courier New','Georgia','Roboto','Poppins','Lato','Montserrat','Nunito','Raleway','Open Sans','Quicksand','Playfair Display','Dancing Script'].forEach(f=>{
+const fonteSelect = document.getElementById('seletor-fontes');
+const btnFontes = document.getElementById('btn-fontes');
+
+// lista de fontes
+['Arial','Roboto','Verdana','Poppins','Courier New','Georgia','Inter','Tahoma','Lato','Montserrat','Nunito','Raleway','Open Sans','Quicksand','Playfair Display','Dancing Script']
+.forEach(f => {
   const opt = document.createElement('option');
   opt.value = f;
   opt.textContent = f;
   fonteSelect.appendChild(opt);
 });
-document.querySelector('.toolbar .left').appendChild(fonteSelect);
 
-fonteSelect.addEventListener('change', ()=>{
-  document.querySelectorAll('#registro, #lista').forEach(sec=>{
+// mostrar/esconder seletor ao clicar no botão
+btnFontes.addEventListener('click', () => {
+  fonteSelect.classList.toggle('show');
+});
+
+// aplicar fonte ao trocar no seletor
+fonteSelect.addEventListener('change', () => {
+  document.querySelectorAll('#registro, #lista').forEach(sec => {
     sec.style.fontFamily = fonteSelect.value;
   });
 });
