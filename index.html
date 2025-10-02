@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -39,15 +40,18 @@
       <!-- === AREA PRESENCA === -->
       <div id="presenca-area" class="hidden">
         <div class="toolbar">
-          <div class="left">
-            <button class="btn ghost" id="btn-registra" onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
-            <button class="btn ghost" onclick="mostrarPagina('lista')">📋 Lista</button>
-          </div>
-          <div class="right">
-            <span id="user-email" class="small muted"></span>
-            <button class="btn ghost" id="logout-btn">Sair</button>
-          </div>
-        </div>
+  <div class="left">
+    <button class="btn ghost" id="btn-registra" onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
+    <button class="btn ghost" onclick="mostrarPagina('lista')">📋 Lista</button>
+    <button class="btn ghost" id="btn-fontes">🎨 Fontes</button>
+    <select id="seletor-fontes" class="hidden"></select>
+  </div>
+  <div class="right">
+    <span id="user-email" class="small muted"></span>
+    <button class="btn ghost" id="logout-btn">Sair</button>
+  </div>
+</div>
+
 
         <main class="presenca-main">
           <!-- Registro -->
@@ -65,11 +69,14 @@
                 </select>
                 <input id="vinculoExtra" placeholder="Detalhes" />
               </div>
-              <select id="tipo" required>
-                <option>Convidado</option>
-                <option>Visitante</option>
-                <option>Membro</option>
-              </select>
+            <div class="row">
+  <select id="tipo" required>
+    <option>Convidado(a) por</option>
+    <option>Visitante</option>
+    <option>Membro</option>
+  </select>
+  <input id="tipoExtra" placeholder="Detalhes" />
+</div>
               <button type="submit" class="btn primary">Salvar Presença</button>
             </form>
           </section>
@@ -88,7 +95,7 @@
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr><th>Nome</th><th>Acompanhante</th><th>Vínculo</th><th>Detalhes</th><th>Tipo</th><th>Data</th><th>Hora</th></tr>
+                  <tr><th>Nome</th><th>Acompanhante</th><th>Vínculo</th><th>Detalhes</th><th>Tipo</th><th>Detalhe Extra</th><th>Data</th><th>Hora</th></tr>
                 </thead>
                 <tbody id="tabelaPresencas"></tbody>
               </table>
@@ -100,6 +107,7 @@
 
     </div>
   </div>
+
 
    <!-- Footer -->
   <footer>
