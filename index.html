@@ -1,111 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Presença - ADB Vila Élida 2025</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ADB Vila Élida — Presença</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2>Menu</h2>
-    <button onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
-    <button onclick="mostrarPagina('lista')">📋 Lista de Presença</button>
-    <button onclick="mostrarPagina('config')">⚙️ Configurações</button>
-    <div class="relogio" id="relogio"></div>
-  </aside>
 
-  <!-- Main -->
-  <main>
-    <!-- Logo da Igreja -->
-    <div class="logo-igreja">
-      <img src="https://i.ibb.co/yF9CY2tV/327185183-739228714063067-4074704671844114300-n.jpg" alt="Logo Igreja">
-    </div>
+  <!-- Fundo -->
+  <div class="bg"></div>
 
-    <!-- Registro -->
-    <section id="registro" class="pagina ativa">
-      <h1>Registrar Presença</h1>
-      <form id="formPresenca">
-        <label>Nome:</label>
-        <input type="text" id="nome" required>
+  <!-- Card central -->
+  <div class="wrap">
+    <div class="card">
 
-        <label>Acompanhante:</label>
-        <input type="text" id="acompanhante">
-
-        <label>Vínculo:</label>
-        <div class="vinculo-container">
-          <select id="vinculo" required>
-            <option value="">Selecione o vínculo</option>
-            <option value="Congregação (bairro)">Congregação (bairro)</option>
-            <option value="Outra religião">Outra religião</option>
-            <option value="Sem igreja">Sem igreja</option>
-          </select>
-          <input type="text" id="vinculoExtra" placeholder="Detalhes">
-        </div>
-
-        <label>Tipo:</label>
-        <select id="tipo" required>
-          <option value="Convidado">Convidado</option>
-          <option value="Visitante">Visitante</option>
-          <option value="Membro">Membro</option>
-        </select>
-
-        <button type="submit">Registrar</button>
-      </form>
-    </section>
-
-    <!-- Lista -->
-    <section id="lista" class="pagina">
-      <h1>Lista de Presença</h1>
-      <div class="filtros">
-        <label>Filtrar por data:</label>
-        <input type="date" id="filtroData">
-        <label>Mês:</label>
-        <input type="month" id="filtroMes">
-        <label>Ano:</label>
-        <input type="number" id="filtroAno" placeholder="2025">
-        <button onclick="aplicarFiltros()">🔎 Filtrar</button>
-        <button onclick="limparFiltros()">❌ Limpar</button>
+      <!-- Logo / título -->
+      <div class="card-top">
+        <img class="logo" src="https://i.ibb.co/yF9CY2tV/327185183-739228714063067-4074704671844114300-n.jpg" alt="ADB Vila Élida">
+        <h1 id="headline">Conecte-se</h1>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Acompanhante</th>
-            <th>Vínculo</th>
-            <th>Detalhes</th>
-            <th>Tipo</th>
-            <th>Data</th>
-            <th>Hora</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaPresencas"></tbody>
-      </table>
-      <p id="contador"></p>
-    </section>
+      <!-- === AREA AUTH: Login / Cadastro === -->
+      <div id="auth-area">
+        <form id="auth-form" class="form">
+          <input id="email" type="email" placeholder="E-mail" required autocomplete="username"/>
+          <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
+          <button id="submit-btn" class="btn primary">Entrar</button>
+        </form>
 
-    <!-- Configurações -->
-    <aside id="config" class="pagina">
-      <h1>⚙️ Configurações</h1>
-      <label>Fonte:</label>
-      <select id="fontSelect">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Tahoma">Tahoma</option>
-        <option value="Georgia">Georgia</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Lucida Sans">Lucida Sans</option>
-        <option value="Trebuchet MS">Trebuchet MS</option>
-        <option value="Impact">Impact</option>
-        <option value="Comic Sans MS">Comic Sans MS</option>
-      </select>
-    </aside>
-  </main>
+        <p class="small" id="auth-switch">
+          <span id="auth-msg">Não possui conta?</span>
+          <a href="#" id="switch-link">Cadastre-se</a>
+        </p>
+        <p id="auth-feedback" class="feedback"></p>
+      </div>
 
-  <!-- Footer -->
+      <!-- === AREA PRESENCA === -->
+      <div id="presenca-area" class="hidden">
+        <div class="toolbar">
+          <div class="left">
+            <button class="btn ghost" id="btn-registra" onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
+            <button class="btn ghost" onclick="mostrarPagina('lista')">📋 Lista</button>
+          </div>
+          <div class="right">
+            <span id="user-email" class="small muted"></span>
+            <button class="btn ghost" id="logout-btn">Sair</button>
+          </div>
+        </div>
+
+        <main class="presenca-main">
+          <!-- Registro -->
+          <section id="registro" class="pagina ativa">
+            <h2>Registrar Presença</h2>
+            <form id="formPresenca" class="form">
+              <input id="nome" placeholder="Nome" required />
+              <input id="acompanhante" placeholder="Acompanhante (opcional)" />
+              <div class="row">
+                <select id="vinculo" required>
+                  <option value="">Selecione o vínculo</option>
+                  <option>Congregação</option>
+                  <option>Outra religião</option>
+                  <option>Sem igreja</option>
+                </select>
+                <input id="vinculoExtra" placeholder="Detalhes" />
+              </div>
+              <select id="tipo" required>
+                <option>Convidado</option>
+                <option>Visitante</option>
+                <option>Membro</option>
+              </select>
+              <button type="submit" class="btn primary">Salvar Presença</button>
+            </form>
+          </section>
+
+          <!-- Lista -->
+          <section id="lista" class="pagina">
+            <h2>Lista de Presença</h2>
+            <div class="filtros">
+              <input id="filtroData" type="date"/>
+              <input id="filtroMes" type="month"/>
+              <input id="filtroAno" type="number" placeholder="2025"/>
+              <button class="btn" id="btnFiltrar">Filtrar</button>
+              <button class="btn ghost" id="btnLimpar">Limpar</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Nome</th><th>Acompanhante</th><th>Vínculo</th><th>Detalhes</th><th>Tipo</th><th>Data</th><th>Hora</th></tr>
+                </thead>
+                <tbody id="tabelaPresencas"></tbody>
+              </table>
+            </div>
+            <p id="contador" class="muted"></p>
+          </section>
+        </main>
+      </div>
+
+    </div>
+  </div>
+
+   <!-- Footer -->
   <footer>
     <p>ADB Vila Élida 2025</p>
     <div class="logos-rodape">
@@ -116,7 +112,7 @@
     </div>
   </footer>
 
-  <!-- Script JS -->
+  <!-- Firebase + App JS -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
