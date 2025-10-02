@@ -1,165 +1,91 @@
-/* (Mesma versão que você enviou) */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  display: flex;
-  min-height: 100vh;
+/* Reset */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter, system-ui, Arial, sans-serif;-webkit-font-smoothing:antialiased}
+
+/* Fundo */
+.bg{
+  position:fixed;inset:0;
+  background:linear-gradient(180deg, rgba(2,35,86,0.95) 0%, rgba(7,54,99,0.95) 100%), url('https://img.freepik.com/fotos-gratis/a-biblia-aberta-sobre-a-mesa-de-madeira-com-luz-suave_1232-2198.jpg') center/cover no-repeat;
+  filter:brightness(0.6);
+  z-index:-1;
 }
 
-.sidebar {
-  width: 250px;
-  background: #003366;
-  color: white;
-  padding: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+/* Container central */
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px}
+.card{width:100%;max-width:920px;background:linear-gradient(180deg,#ffffffee,#ffffffdd);border-radius:14px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,0.25);display:flex;flex-direction:column;gap:18px}
+
+/* Top */
+.card-top{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:4px}
+.logo{width:110px;height:110px;border-radius:999px;object-fit:cover;border:6px solid #042a57;background:white;padding:6px}
+#headline{color:#042a57;font-size:28px;margin:0}
+
+/* Forms */
+.form{display:flex;flex-direction:column;gap:12px;width:100%}
+.form input,.form select{padding:12px;border-radius:8px;border:1px solid #d6dbe6;font-size:15px;width:100%}
+.btn{padding:12px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+.btn.primary{background:#0b4f99;color:white}
+.btn.ghost{background:transparent;border:1px solid rgba(5,75,135,0.12);color:#0b4f99}
+
+/* small text */
+.small{font-size:14px;color:#042a57}
+.muted{color:#425c77}
+
+/* auth switch and feedback */
+#auth-switch{text-align:center;margin-top:6px}
+#auth-switch a{color:#0b4f99;text-decoration:none;font-weight:700}
+.feedback{min-height:18px;text-align:center;color:#b73838}
+
+/* presenca area layout */
+.hidden{display:none}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.presenca-main{display:flex;flex-direction:column;gap:18px;padding-top:8px}
+.pagina{display:none}
+.pagina.ativa{display:block}
+.row{display:flex;gap:10px}
+.row input,.row select{flex:1}
+
+/* table */
+.table-wrap{overflow:auto;background:white;border-radius:8px;padding:8px}
+table{width:100%;border-collapse:collapse}
+table th,table td{padding:10px;border-bottom:1px solid #eef;vertical-align:middle;text-align:center;font-size:14px}
+table th{background:#0b4f99;color:white;border-radius:4px}
+
+/* filtros */
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* Seletor de fontes */
+#seletor-fontes{
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid #d6dbe6;
+  font-size:14px;
+  background:white;
+  cursor:pointer;
 }
 
-.sidebar h2 {
-  margin-top: 0;
-  text-align: center;
+/* Hora em tempo real */
+#hora-atual{
+  font-weight:600;
+  font-size:14px;
+  color:#042a57;
+  margin-left:10px;
 }
 
-.sidebar button {
-  display: block;
-  margin: 25px 0;
-  padding: 25px;
-  width: 100%;
-  border: none;
-  background: #0055aa;
-  color: white;
-  cursor: pointer;
-  border-radius: 6px;
-  text-align: center; 
-  transition: background 0.3s;
-}
-
-.sidebar button:hover {
-  background: #0077dd;
-}
-
-.relogio {
-  margin-top: 30px;
-  font-size: 1.2em;
-  text-align: center;
-}
-
-main {
-  flex-grow: 1;
-  padding: 100px;
-  display: flex;
-  flex-direction: column;
-  background: #f4f4f4;
-}
-
-.logo-igreja {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.logo-igreja img {
-  max-width: 180px;
-  border-radius: 8px;
-  border: 2px solid #003366;
-}
-
-.pagina {
-  display: none;
-}
-
-.pagina.ativa {
-  display: block;
-}
-
-h1 {
-  color: #003366;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 600px;
-  background: #eef;
-  padding: 15px;
-  border-radius: 10px;
-  width: 100%;
-}
-
-form input, form select, form button {
-  padding: 10px;
-  font-size: 1em;
-}
-
-form button {
-  background: #003366;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.3s;
-}
-
-form button:hover {
-  background: #0055aa;
-}
-
-.vinculo-container {
-  display: flex;
-  gap: 10px;
-}
-
-.filtros {
-  margin: 15px 0;
-  padding: 10px;
-  background: #eef;
-  border-radius: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin-top: 20px;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-table th, table td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: center;
-}
-
-table th {
-  background: #003366;
-  color: white;
-}
-
-#config {
-  background: #eef;
-  padding: 15px;
-  border-radius: 8px;
-  max-width: 300px;
-}
-
-#registro, #lista {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* Olhinho de senha */
+#auth-form div{position: relative;}
+#auth-form span{
+  position: absolute;
+  right:12px;
+  top:50%;
+  transform: translateY(-50%);
+  cursor:pointer;
+  font-size:16px;
 }
 
 footer {
   width: 100%;
   text-align: center;
   padding: 15px;
-  background: #003366;
   color: white;
 }
 
@@ -179,19 +105,15 @@ footer {
 }
 
 /* Responsivo */
-@media (max-width: 900px) {
-  body {
-    flex-direction: column;
-  }
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-  main {
-    padding: 10px;
-  }
-  form {
-    max-width: 100%;
-  }
+@media (max-width:880px){
+  .card{padding:18px}
+  .logo{width:90px;height:90px}
+  .row{flex-direction:column}
+  .toolbar{flex-direction:column;align-items:stretch;gap:8px}
+}
+@media (max-width:480px){
+  .card{padding:14px}
+  #headline{font-size:22px}
+  table th,table td{font-size:13px;padding:8px}
+  #hora-atual{margin:6px 0 0 0;}
 }
