@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,10 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ADB Vila Élida — Presença</title>
   <link rel="stylesheet" href="style.css">
-<link rel="icon" href="https://i.ibb.co/v6BD6D3h/logo.png?v=2">
-<link rel="shortcut icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
-<link rel="apple-touch-icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
-
+  <link rel="icon" href="https://i.ibb.co/v6BD6D3h/logo.png?v=2">
+  <link rel="shortcut icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
 </head>
 <body>
 
@@ -33,7 +31,6 @@
           <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
           <button id="submit-btn" class="btn primary">Entrar</button>
         </form>
-
         <p class="small" id="auth-switch">
           <span id="auth-msg">Não possui conta?</span>
           <a href="#" id="switch-link">Cadastre-se</a>
@@ -44,49 +41,49 @@
       <!-- === AREA PRESENCA === -->
       <div id="presenca-area" class="hidden">
         <div class="toolbar">
-  <div class="left">
-    <button class="btn ghost" id="btn-registra" onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
-    <button class="btn ghost" onclick="mostrarPagina('lista')">📋 Lista</button>
-    <button class="btn ghost" id="btn-fontes">🎨 Fontes</button>
-    <select id="seletor-fontes" class="hidden"></select>
-  </div>
-  <div class="right">
-    <span id="user-email" class="small muted"></span>
-    <button class="btn ghost" id="logout-btn">Sair</button>
-  </div>
+          <div class="left">
+            <button class="btn ghost" id="btn-registra" onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
+            <button class="btn ghost" onclick="mostrarPagina('lista')">📋 Lista</button>
+           <div class="font-menu">
+  <button class="font-button">🎨 Fontes</button>
+  <div class="font-list hidden" id="lista-fontes"></div>
 </div>
-
+          </div>
+          <div class="right">
+            <span id="user-email" class="small muted"></span>
+            <button class="btn ghost" id="logout-btn">Sair</button>
+            <button class="btn ghost" id="btnLimpar">Limpar Lista</button>
+          </div>
+        </div>
 
         <main class="presenca-main">
           <!-- Registro -->
           <section id="registro" class="pagina ativa">
             <h2>Registrar Presença</h2>
             <form id="formPresenca" class="form">
-             <input id="nome" name="nome" placeholder="Nome" required />
+              <input id="nome" name="nome" placeholder="Nome"  />
               <input id="acompanhante" name="acompanhante" placeholder="Acompanhante (opcional)" />
-                <input id="telefone" name="telefone" type="tel" placeholder="Telefone" />
-<input id="endereco" name="endereco" type="text" placeholder="Endereço" />
+              <input id="telefone" name="telefone" type="tel" placeholder="Telefone" />
+              <input id="endereco" name="endereco" type="text" placeholder="Endereço" />
               <div class="row">
-  <select id="vinculo" name="vinculo" required>
-    <option value="" disabled selected>Selecione</option>
-    <option value="Congregacao">Congregação</option>
-    <option value="OutraReligiao">Outra religião</option>
-    <option value="SemIgreja">Sem igreja</option>
-  </select>
-  <input id="vinculoExtra" name="vinculoExtra" placeholder="Detalhes" />
-</div>
-
-<div class="row">
-  <select id="tipo" name="tipo" required>
-    <option value="" disabled selected>Selecione</option>
-    <option value="Convidado">Convidado(a) por</option>
-    <option value="Visitante">Visitante</option>
-    <option value="Membro">Membro</option>
-  </select>
-  <input id="tipoExtra" name="tipoExtra" placeholder="Detalhes" />
-</div>
-
-              <button type="submit" class="btn primary">Salvar Presença</button>
+                <select id="vinculo" name="vinculo" >
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="Congregacao">Congregação</option>
+                  <option value="OutraReligiao">Outra religião</option>
+                  <option value="SemIgreja">Sem igreja</option>
+                </select>
+                <input id="vinculoExtra" name="vinculoExtra" placeholder="Detalhes" />
+              </div>
+              <div class="row">
+                <select id="tipo" name="tipo" >
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="Convidado">Convidado(a) por</option>
+                  <option value="Visitante">Visitante</option>
+                  <option value="Membro">Membro</option>
+                </select>
+                <input id="tipoExtra" name="tipoExtra" placeholder="Detalhes" />
+              </div>
+             <button id="salvarBtn" class="btn">Registrar Presença</button>
             </form>
           </section>
 
@@ -95,30 +92,36 @@
             <h2>Lista de Presença</h2>
             <div class="filtros">
               <input id="filtroData" type="date"/>
-              <input id="filtroMes" type="month"/>
-              <input id="filtroAno" type="number" placeholder="2025"/>
+              <!-- Novo seletor de período -->
+              <select id="filtroPeriodo">
+                <option value="">Todos os períodos</option>
+                <option value="Madrugada">Madrugada</option>
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+                <option value="Noite">Noite</option>
+              </select>
               <button class="btn" id="btnFiltrar">Filtrar</button>
-              <button class="btn ghost" id="btnLimpar">Limpar</button>
             </div>
-
             <div class="table-wrap">
               <table>
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Acompanhante</th>
-                    <th>Telefone</th>
-                    <th>Endereço</th>
-                    <th>Vínculo</th>
-                    <th>Detalhes</th>
-                    <th>Tipo</th>
-                    <th>Detalhe Extra</th>
-                    <th>Data</th>
-                    <th>Hora</th>
-                  </tr>
-                </thead>
-                <tbody id="tabelaPresencas"></tbody>
-              </table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Acompanhante</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Vínculo</th>
+                    <th>Detalhe Extra</th>
+                    <th>Tipo</th> 
+                    <th>Detalhe Extra</th>
+                    <th>Data</th> 
+                    <th>Hora</th>
+                    <th>Período</th>
+                    <th>Ações</th>   
+                  </tr>
+                </thead>
+                <tbody id="tabelaPresencas"></tbody>
+              </table>
             </div>
             <p id="contador" class="muted"></p>
           </section>
@@ -128,8 +131,7 @@
     </div>
   </div>
 
-
-   <!-- Footer -->
+  <!-- Footer -->
   <footer>
     <p>ADB Vila Élida 2025</p>
     <div class="logos-rodape">
@@ -140,12 +142,6 @@
     </div>
   </footer>
 
-  <!-- Firebase + App JS -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
