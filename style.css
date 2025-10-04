@@ -1,7 +1,7 @@
-
-/* Reset */
+/* === Seu CSS original (mantido) === */
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter, system-ui, Arial, sans-serif;-webkit-font-smoothing:antialiased}
+
 
 /* Fundo */
 .bg{
@@ -39,112 +39,185 @@ html,body{height:100%;margin:0;font-family:Inter, system-ui, Arial, sans-serif;-
 /* presenca area layout */
 .hidden{display:none}
 .toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.presenca-main{display:flex;flex-direction:column;gap:18px;padding-top:8px}
+.left,.right{display:flex;gap:8px;align-items:center}
+.presenca-main{display:flex;flex-direction:column;gap:18px}
 .pagina{display:none}
 .pagina.ativa{display:block}
-.row{display:flex;gap:10px}
-.row input,.row select{flex:1}
 
-/* table */
-.table-wrap{overflow:auto;background:white;border-radius:8px;padding:8px}
-table{width:100%;border-collapse:collapse}
-table th,table td{padding:10px;border-bottom:1px solid #eef;vertical-align:middle;text-align:center;font-size:14px}
-table th{background:#0b4f99;color:white;border-radius:4px}
+/* tabela */
+.table-wrap{overflow-x:auto;background:white;padding:12px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:#0b4f99;color:white}
+th,td{padding:8px;border:1px solid #ddd;text-align:left}
+tbody tr:nth-child(even){background:#f9f9f9}
+#contador{font-weight:600;margin-top:6px}
 
-/* filtros */
-.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+/* Footer */
+footer{margin-top:32px;text-align:center;color:#d6dbe6;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:6px}
+footer .logos-rodape{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+footer img{width:40px;height:40px;object-fit:cover}
 
-#seletor-fontes {
-  display: none; /* começa escondido */
-  background-color: transparent;
-  color: #0b4f99;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
-  margin-left: 10px;
+/* === Ajustes para filtros === */
+.filtros{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.filtros input,.filtros select{padding:10px;border-radius:8px;border:1px solid #d6dbe6;font-size:14px}
+.filtros button{padding:10px 12px;border-radius:8px;background:#0b4f99;color:white;border:none;cursor:pointer;font-weight:600}
+/* Ajuste de largura para os campos de data e mês */
+.filtros input[type="date"],
+.filtros input[type="month"] {
+    max-width: 150px; /* Limita o tamanho para que caibam lado a lado */
+    min-width: 120px;
 }
 
-#seletor-fontes:hover {
-  background-color: #D9D5BF;
+/* ====== CORREÇÃO DA TABELA ====== */
+
+/* Garante que a tabela use 100% da largura */
+#lista table {
+    table-layout: auto; /* Deixa o navegador calcular automaticamente */
+    width: 100%;
+    border-collapse: collapse; 
 }
 
+/* Ajusta células para exibir texto de forma horizontal */
+#lista table td, 
+#lista table th {
+    vertical-align: middle; /* Centraliza verticalmente */
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Colunas que não podem quebrar (mantêm texto em linha única com '...') */
+#lista table td:nth-child(1), /* Nome */
+#lista table td:nth-child(9), /* Data */
+#lista table td:nth-child(10), /* Hora */
+#lista table td:nth-child(11) { /* Período */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Colunas que podem quebrar texto longo normalmente */
+#lista table td:nth-child(2), /* Acompanhante */
+#lista table td:nth-child(3), /* Telefone */
+#lista table td:nth-child(4), /* Endereço */
+#lista table td:nth-child(5), /* Vínculo */
+#lista table td:nth-child(6), /* Detalhe Extra */
+#lista table td:nth-child(7), /* Tipo */
+#lista table td:nth-child(8) { /* Detalhe Extra */
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* Ajusta larguras principais */
+#lista table th:nth-child(1) { width: 12%; } /* Nome */
+#lista table th:nth-child(4) { width: 18%; } /* Endereço */
+#lista table th:nth-child(9), /* Data */
+#lista table th:nth-child(10), /* Hora */
+#lista table th:nth-child(11) { width: 8%; } /* Período */
+
+/* Estilo básico para o novo botão de edição */
+.btn-editar {
+    background-color: #f39c12; /* Laranja */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Ajuste a largura da nova coluna de Ações */
+#lista table th:nth-child(12) {
+    width: 8%; 
+    min-width: 70px; /* Garante que caiba a palavra "Alterar" */
+}
+
+/* === Exibição do seletor de fontes === */
 #seletor-fontes.show {
-  display: inline-block; /* aparece quando tiver a classe show */
+  display: block;
 }
 
 
+/* Ajuste para responsividade */
+@media(max-width:768px){
+  .wrap{padding:40px}
+  .card{padding:40px}
+  .toolbar{flex-direction:column;align-items:flex-start}
+  .left,.right{flex-wrap:wrap}
+  
+  /* Regra existente: Quebra os filtros para uma coluna */
+  .filtros{
+    flex-direction:column;
+    align-items:flex-start;
+    width: 100%; /* Novo: Ocupa a largura total da div pai */
+  }
 
-/* Hora em tempo real */
-#hora-atual{
-  font-weight:600;
-  font-size:14px;
-  color:#042a57;
-  margin-left:10px;
+  /* NOVO: Garante que todos os inputs/selects/botões do filtro ocupem 100% de largura */
+  .filtros input, 
+  .filtros select, 
+  .filtros button {
+    width: 100%;
+    max-width: 100%; 
+  }
 }
 
-/* Olhinho de senha */
-#auth-form div{position: relative;}
-#auth-form span{
-  position: absolute;
-  right:12px;
-  top:50%;
-  transform: translateY(-50%);
-  cursor:pointer;
-  font-size:16px;
+/* ======= MENU ESTILIZADO DE FONTES ======= */
+.font-menu {
+  position: relative;
+  display: inline-block;
 }
 
-footer {
-  width: 100%;
-  text-align: center;
-  padding: 15px;
+.font-button {
+  background: linear-gradient(90deg, #0b4f99, #2176ff);
   color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+.font-button:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(11, 79, 153, 0.4);
 }
 
-.logos-rodape {
-  margin-top: 10px;
+.font-list {
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  top: 45px;
+  left: 0;
+  width: 220px;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 280px;
+  padding: 5px 0;
+  animation: fadeIn 0.25s ease;
+  display: none; /* 🔹 começa escondida */
+}
+.font-list.hidden {
+  display: none; /* 🔹 fica escondida */
+}
+.font-list:not(.hidden) {
+  display: block; /* 🔹 aparece quando o JS remove "hidden" */
+}
+.font-list div {
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  font-size: 15px;
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.font-list div:hover {
+  background: #f0f6ff;
+  color: #0b4f99;
+  transform: scale(1.02);
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-5px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
-.logos-rodape img {
-  max-width: 60px;
-  max-height: 60px;
-  border-radius: 5px;
-  border: 1px solid white;
-}
-
-/* Flexbox compatível */
-.row {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  gap: 10px;
-}
-
-/* Gradiente de fundo */
-.bg {
-  background: -webkit-linear-gradient(180deg, rgba(2,35,86,0.95) 0%, rgba(7,54,99,0.95) 100%);
-  background: linear-gradient(180deg, rgba(2,35,86,0.95) 0%, rgba(7,54,99,0.95) 100%);
-}
-
-
-/* Responsivo */
-@media (max-width:880px){
-  .card{padding:18px}
-  .logo{width:90px;height:90px}
-  .row{flex-direction:column}
-  .toolbar{flex-direction:column;align-items:stretch;gap:8px}
-}
-@media (max-width:480px){
-  .card{padding:14px}
-  #headline{font-size:22px}
-  table th,table td{font-size:13px;padding:8px}
-  #hora-atual{margin:6px 0 0 0;}
-}
