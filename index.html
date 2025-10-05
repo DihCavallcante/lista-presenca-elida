@@ -43,12 +43,16 @@
         <div class="toolbar">
           <div class="left">
             <button class="btn ghost" id="btn-registra" onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
-            <button class="btn ghost" onclick="mostrarPagina('lista')">📋 Lista</button>
+            <button class="btn ghost" id="btn-lista" onclick="mostrarPagina('lista')">📋 Lista</button>
+
            <div class="font-menu">
   <button class="font-button">🎨 Fontes</button>
   <div class="font-list hidden" id="lista-fontes"></div>
 </div>
-          </div>
+<button id="toggle-theme" class="theme-toggle">
+  🌞 / 🌙
+</button>
+</div>
           <div class="right">
             <span id="user-email" class="small muted"></span>
             <button class="btn ghost" id="logout-btn">Sair</button>
@@ -125,6 +129,36 @@
             </div>
             <p id="contador" class="muted"></p>
           </section>
+<!-- 🗒️ seção de Anotações -->
+<section id="anotacoes" class="pagina">
+  <h2>Minhas Anotações</h2>
+  <textarea id="campoAnotacoes" placeholder="Escreva suas anotações aqui..."></textarea>
+  <button id="salvarAnotacao" class="btn">Salvar Anotações</button>
+  <p id="feedbackAnotacao" class="small muted"></p>
+
+  <!-- NOVA ÁREA DE HISTÓRICO -->
+  <div class="historico-anotacoes">
+    <h3>📅 Minhas Anotações</h3>
+    <div class="filtros-anotacoes">
+      <input type="date" id="dataAnotacoes">
+      <button id="verAntigasBtn" class="btn">Ver Anotações Antigas</button>
+    </div>
+    <div class="font-size-control">
+  <label for="fontSizeSelect">Tamanho da letra:</label>
+  <select id="fontSizeSelect">
+    <option value="18px">Pequeno</option>
+    <option value="20px" selected>Médio</option>
+    <option value="24px">Grande</option>
+    <option value="28px">Muito grande</option>
+  </select>
+</div>
+
+    <div id="listaAnotacoes" class="lista-anotacoes"></div>
+  </div>
+</section>
+
+            <p id="feedbackAnotacao" class="small muted"></p>
+          </section>
         </main>
       </div>
 
@@ -135,10 +169,10 @@
   <footer>
     <p>ADB Vila Élida 2025</p>
     <div class="logos-rodape">
-      <a href="#"><img src="https://i.ibb.co/wZzfjyfC/Logo-UM-com-Chama-Distintiva.png" alt="Logo 1"></a>
-      <a href="#"><img src="https://i.ibb.co/Fk8bSK2c/Chat-GPT-Image-1-de-out-de-2025-01-08-36.png" alt="Logo 2"></a>
-      <a href="#"><img src="https://i.ibb.co/3ymx6qFf/Logo-Elegante-com-Diamante-Geom-trico.png" alt="Logo 3"></a>
-      <a href="#"><img src="https://i.ibb.co/bMRm7y23/Logotipo-ADB-28-Kids-Vila-lida.png" alt="Logo 4"></a>
+      <a href="#"><img src="https://i.ibb.co/RGP1Sp3h/uma-removebg-preview.png" alt="Logo 1"></a>
+      <a href="#"><img src="https://i.ibb.co/WWTHBZv1/ufadeb-removebg-preview.png" alt="Logo 2"></a>
+      <a href="#"><img src="https://i.ibb.co/wND86fHB/Joias-removebg-preview.png" alt="Logo 3"></a>
+      <a href="#"><img src="https://i.ibb.co/bgPqQ3mf/kids-removebg-preview.png" alt="Logo 4"></a>
     </div>
   </footer>
 
