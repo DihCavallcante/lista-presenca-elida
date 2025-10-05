@@ -1,6 +1,7 @@
 // Firebase SDK (mantive sua versão 10.12.0)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, getDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// Substitua sua linha existente por esta (mesma URL, só adicionei setDoc)
+import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, getDoc, query, where, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 
@@ -473,6 +474,205 @@ setInterval(()=>{
 }, 60000);
 
 
+
 // Inicializa
 setMode('login');
+
+
+// ==================== 🗒️ ANOTAÇÕES DIÁRIAS + HISTÓRICO (corrigido) ====================
+
+// util
+function $(id){ return document.getElementById(id); }
+
+// espera DOM
+document.addEventListener('DOMContentLoaded', () => {
+  const campoAnotacoes = $('campoAnotacoes');
+  const salvarAnotacaoBtn = $('salvarAnotacao');
+  const feedbackAnotacao = $('feedbackAnotacao');
+  const listaAnotacoes = $('listaAnotacoes');
+  const verAntigasBtn = $('verAntigasBtn');
+  const seletorData = $('dataAnotacoes');
+  let idAnotacaoEditando = null;
+
+  if (!campoAnotacoes || !salvarAnotacaoBtn || !listaAnotacoes) return;
+
+  const nowISO = () => new Date().toISOString().split('T')[0];
+  const isoToPtBR = iso => { if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; };
+
+  function showError(msg, err){
+    console.error(msg, err);
+    if(feedbackAnotacao)
+      feedbackAnotacao.textContent = '❌ ' + (err?.message ? `${msg}: ${err.message}` : msg);
+  }
+
+  // === Listar Anotações ===
+  async function listarAnotacoes(dataISO = nowISO()) {
+    const user = auth.currentUser;
+    if (!user) {
+      feedbackAnotacao.textContent = '⚠️ Faça login para ver anotações.';
+      listaAnotacoes.innerHTML = '';
+      return;
+    }
+
+    listaAnotacoes.innerHTML = '<p>🕓 Carregando...</p>';
+    feedbackAnotacao.textContent = '';
+
+    try {
+      const q = query(
+        collection(db, 'anotacoes'),
+        where('uid', '==', user.uid),
+        where('data', '==', dataISO),
+        orderBy('hora', 'asc')
+      );
+
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        listaAnotacoes.innerHTML = `<p>🗒️ Nenhuma anotação em ${isoToPtBR(dataISO)}.</p>`;
+        return;
+      }
+
+      listaAnotacoes.innerHTML = '';
+      snap.forEach(docSnap => {
+        const a = docSnap.data();
+        const id = docSnap.id;
+
+        const item = document.createElement('div');
+        item.className = 'anotacao-item';
+        item.innerHTML = `
+          <div class="anotacao-bloco">
+            <div class="texto-anotacao">${(a.texto || '').replace(/\n/g, '<br>')}</div>
+            <span class="anotacao-hora">${a.hora || ''}</span>
+            <small style="display:block;color:#666;margin-top:6px">${isoToPtBR(a.data || dataISO)}</small>
+          </div>
+          <div class="acoes-anotacao">
+            <button class="btn-editar" data-id="${id}">✏️ Editar</button>
+            <button class="btn-excluir" data-id="${id}">🗑️ Excluir</button>
+          </div>
+        `;
+        listaAnotacoes.appendChild(item);
+      });
+
+      // 🔹 Eventos de Edição
+      document.querySelectorAll('.btn-editar').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const docRef = doc(db, 'anotacoes', id);
+          const snap = await getDoc(docRef);
+
+          if (snap.exists()) {
+            const dados = snap.data();
+            campoAnotacoes.value = dados.texto || '';
+            feedbackAnotacao.textContent = '✏️ Editando anotação...';
+            salvarAnotacaoBtn.textContent = 'Atualizar Anotação';
+            idAnotacaoEditando = id;
+          }
+        });
+      });
+
+      // 🔹 Eventos de Exclusão
+      document.querySelectorAll('.btn-excluir').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('🗑️ Deseja realmente excluir esta anotação?')) return;
+          try {
+            await deleteDoc(doc(db, 'anotacoes', btn.dataset.id));
+            feedbackAnotacao.textContent = '🗑️ Anotação excluída.';
+            listarAnotacoes(dataISO);
+          } catch (err) {
+            showError('Erro ao excluir anotação', err);
+          }
+        });
+      });
+
+    } catch (err) {
+      showError('Erro ao carregar anotações', err);
+      listaAnotacoes.innerHTML = `<p>❌ Erro ao carregar anotações.</p>`;
+    }
+  }
+
+  // === Salvar / Atualizar ===
+  salvarAnotacaoBtn.addEventListener('click', async (ev) => {
+    ev.preventDefault();
+    const user = auth.currentUser;
+    if (!user) return feedbackAnotacao.textContent = '⚠️ Faça login para salvar.';
+
+    const texto = campoAnotacoes.value.trim();
+    if (!texto) return feedbackAnotacao.textContent = '⚠️ Escreva algo antes de salvar.';
+
+    const agora = new Date();
+    const dataISO = agora.toISOString().split('T')[0];
+    const hora = agora.toLocaleTimeString('pt-BR');
+
+    try {
+      if (idAnotacaoEditando) {
+        // 🔸 Atualiza anotação existente
+        const ref = doc(db, 'anotacoes', idAnotacaoEditando);
+        await updateDoc(ref, { texto });
+        feedbackAnotacao.textContent = '✅ Anotação atualizada!';
+        idAnotacaoEditando = null;
+        salvarAnotacaoBtn.textContent = 'Salvar Anotações';
+      } else {
+        // 🔸 Nova anotação
+        await addDoc(collection(db, 'anotacoes'), { uid: user.uid, texto, data: dataISO, hora });
+        feedbackAnotacao.textContent = '✅ Anotação salva!';
+      }
+
+      campoAnotacoes.value = '';
+      listarAnotacoes(dataISO);
+    } catch (err) {
+      showError('Erro ao salvar/atualizar anotação', err);
+    }
+  });
+
+  // === Ver Anotações Antigas ===
+  if (verAntigasBtn && seletorData) {
+    verAntigasBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const val = seletorData.value;
+      if (!val) return feedbackAnotacao.textContent = '⚠️ Escolha uma data.';
+      listarAnotacoes(val);
+      feedbackAnotacao.textContent = `📅 Exibindo anotações de ${isoToPtBR(val)}`;
+    });
+  }
+
+  // Carrega do dia atual ao logar
+  onAuthStateChanged(auth, (user) => { if (user) listarAnotacoes(); });
+});
+
+
+// === Controle de tamanho de fonte das anotações ===
+document.addEventListener("DOMContentLoaded", () => {
+  const fontSelect = document.getElementById("fontSizeSelect");
+  if (fontSelect) {
+    // Define valor inicial
+    document.documentElement.style.setProperty("--tamanho-fonte", fontSelect.value);
+
+    // Atualiza ao mudar
+    fontSelect.addEventListener("change", (e) => {
+      document.documentElement.style.setProperty("--tamanho-fonte", e.target.value);
+    });
+  }
+});
+
+// ====== 🌙 Modo Noturno Responsivo ======
+const themeToggle = document.getElementById('toggle-theme');
+
+// Verifica tema salvo
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark-mode');
+  themeToggle.textContent = '☀️';
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+
+    // Troca ícone
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    // Salva preferência
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+}
+
+
 
