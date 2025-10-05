@@ -1,3 +1,4 @@
+
 /* === Seu CSS original (mantido) === */
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter, system-ui, Arial, sans-serif;-webkit-font-smoothing:antialiased}
@@ -131,34 +132,114 @@ footer img{width:40px;height:40px;object-fit:cover}
     min-width: 70px; /* Garante que caiba a palavra "Alterar" */
 }
 
-/* === Exibição do seletor de fontes === */
-#seletor-fontes.show {
-  display: block;
-}
 
+/* =========================================================
+   📱 AJUSTE DE RESPONSIVIDADE (versão completa e otimizada)
+   ========================================================= */
 
-/* Ajuste para responsividade */
-@media(max-width:768px){
-  .wrap{padding:40px}
-  .card{padding:40px}
-  .toolbar{flex-direction:column;align-items:flex-start}
-  .left,.right{flex-wrap:wrap}
-  
-  /* Regra existente: Quebra os filtros para uma coluna */
-  .filtros{
-    flex-direction:column;
-    align-items:flex-start;
-    width: 100%; /* Novo: Ocupa a largura total da div pai */
+/* 🔸 Tablets (até 768px) */
+@media (max-width: 768px) {
+  .wrap {
+    padding: 20px;
   }
 
-  /* NOVO: Garante que todos os inputs/selects/botões do filtro ocupem 100% de largura */
-  .filtros input, 
-  .filtros select, 
+  .card {
+    padding: 24px;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .left,
+  .right {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  /* Filtros (ajuste principal) */
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.8rem;
+  }
+
+  .filtros input,
+  .filtros select,
   .filtros button {
     width: 100%;
-    max-width: 100%; 
+    max-width: 100%;
+    font-size: 1rem;
+  }
+
+  /* Botões e fontes */
+  .btn,
+  .font-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  #campoAnotacoes {
+    min-height: 140px;
+    font-size: 1rem;
+  }
+
+  table {
+    font-size: 0.9rem;
   }
 }
+
+/* 🔹 Celulares pequenos (até 480px) */
+@media (max-width: 480px) {
+  .wrap {
+    padding: 12px;
+  }
+
+  .toolbar {
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .filtros {
+    gap: 0.6rem;
+  }
+
+  .filtros input,
+  .filtros select,
+  .filtros button {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+  /* Campo de anotações */
+  #campoAnotacoes {
+    font-size: 0.95rem;
+    padding: 0.8rem;
+  }
+
+  /* Tabela de presenças */
+  table {
+    font-size: 0.85rem;
+    width: 100%;
+  }
+
+  table th,
+  table td {
+    padding: 6px 4px;
+  }
+
+  /* Botões menores */
+  .btn {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+}
+
 
 /* ======= MENU ESTILIZADO DE FONTES ======= */
 .font-menu {
@@ -220,4 +301,806 @@ footer img{width:40px;height:40px;object-fit:cover}
   from {opacity: 0; transform: translateY(-5px);}
   to {opacity: 1; transform: translateY(0);}
 }
+
+
+/* ==================== 🗒️ ABA DE ANOTAÇÕES (CENTRALIZADA) ==================== */
+
+#anotacoes {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 🔹 Centraliza tudo horizontalmente */
+  justify-content: center; /* 🔹 Centraliza verticalmente */
+  gap: 1.2rem;
+  padding: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease-in-out;
+  
+}
+
+#anotacoes h2,h3 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #0b4f99;
+  margin-bottom: 10px;
+}
+
+/* Campo de anotações centralizado */
+#campoAnotacoes {
+  width: 100%;
+  max-width: 600px; /* 🔹 Limita largura para centralizar melhor */
+  height: 280px;
+  resize: vertical;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 12px;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  background: #fafafa;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+#campoAnotacoes:focus {
+  border-color: #0b4f99;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(11, 79, 153, 0.2);
+}
+
+/* Botão centralizado */
+#salvarAnotacao {
+  align-self: center;
+  background-color: #0b4f99;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s;
+}
+
+#salvarAnotacao:hover {
+  background-color: #0a4180;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(11, 79, 153, 0.3);
+}
+
+#salvarAnotacao:active {
+  transform: scale(0.96);
+}
+
+#feedbackAnotacao {
+  text-align: center;
+  font-size: 14px;
+  color: #0b4f99;
+  opacity: 0.8;
+}
+
+/* Histórico de anotações centralizado */
+.historico-anotacoes {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.filtros-anotacoes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* === NOVO ESTILO MODERNO DAS ANOTAÇÕES === */
+.lista-anotacoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 22px;
+  padding: 30px;
+  justify-content: center;
+}
+
+/* Cartão individual */
+.anotacao-item {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border-left: 8px solid #4e7cff;
+  border-radius: 20px;
+  padding: 26px 28px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  position: relative;
+}
+
+.anotacao-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Texto */
+.anotacao-item p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: var(--tamanho-fonte, 20px);
+  color: #1a1a1a;
+  line-height: 2.2;
+  font-weight: 400;
+  margin-bottom: 18px;
+  position: relative;
+  padding-left: 18px;
+  
+}
+
+/* Pontinhos decorativos à esquerda (como linhas de caderno) */
+.anotacao-item p::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #4e7cff;
+  font-size: 1em;
+  line-height: 2.2;
+}
+
+/* Info (hora/data) */
+.anotacao-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
+  font-size: 15px;
+  border-top: 1px solid #e6eaf2;
+  padding-top: 10px;
+}
+
+/* Botão de editar */
+.btn-editar-anotacao {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #4e7cff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-editar-anotacao:hover {
+  background: #345eea;
+  transform: scale(1.05);
+}
+
+/* Variações suaves de cor */
+.anotacao-item:nth-child(6n+1) { border-left-color: #4e7cff; background: #eef3ff; }
+.anotacao-item:nth-child(6n+2) { border-left-color: #36c691; background: #ecfff7; }
+.anotacao-item:nth-child(6n+3) { border-left-color: #f5c542; background: #fffbea; }
+.anotacao-item:nth-child(6n+4) { border-left-color: #f56a6a; background: #fff1f1; }
+.anotacao-item:nth-child(6n+5) { border-left-color: #8b6cfb; background: #f5f0ff; }
+.anotacao-item:nth-child(6n+6) { border-left-color: #ff9e57; background: #fff4eb; }
+
+/* Seletor de tamanho da fonte */
+.font-size-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px auto 20px;
+}
+
+.font-size-control label {
+  font-weight: 600;
+  color: #0b4f99;
+}
+
+.font-size-control select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* 🌸 Estilo moderno e interativo para as anotações */
+#anotacoes {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 1400px; /* 🔹 Aumenta bastante a área horizontal */
+  width: 90%; /* 🔹 Ocupa quase toda a tela */
+  padding: 50px 80px; /* 🔹 Mais espaço interno */
+  background: linear-gradient(180deg, #ffffffcc, #f6f8ffcc);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+
+#anotacoes h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Campo de escrita */
+#campoAnotacoes {
+  width: 90%;
+  height: 180px;
+  padding: 18px;
+  font-size: var(--tamanho-fonte, 20px);
+  line-height: 1.8em;
+  border: 2px solid #dcdcdc;
+  border-radius: 12px;
+  resize: vertical;
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 34px,
+    #d8e0ff 35px
+  );
+  background-size: 100% 35px;
+  color: #333;
+  font-family: "Poppins", "Inter", sans-serif;
+  outline: none;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+#campoAnotacoes:focus {
+  border-color: #7b9aff;
+  box-shadow: 0 0 10px rgba(123, 154, 255, 0.4);
+}
+
+/* Botão de salvar */
+#salvarAnotacao {
+  margin-top: 15px;
+  background: linear-gradient(90deg, #5a7fff, #7ba3ff);
+  color: white;
+  font-size: 1rem;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+#salvarAnotacao:hover {
+  background: linear-gradient(90deg, #4b6cff, #6c91ff);
+  transform: scale(1.05);
+}
+
+/* Área de histórico */
+.historico-anotacoes {
+  margin-top: 40px;
+  text-align: left;
+}
+
+.historico-anotacoes h3 {
+  color: #444;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+/* Blocos de anotações salvas */
+.lista-anotacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.anotacao-item {
+  background: #ffffffb8;
+  border-radius: 15px;
+  padding: 20px;
+  border-left: 5px solid #7b9aff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.anotacao-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.texto-anotacao {
+  font-size: var(--tamanho-fonte, 20px);
+  color: #333;
+  line-height: 1.8em;
+  position: relative;
+  padding-left: 20px;
+}
+
+/* 🔹 Pontinhos laterais tipo caderno */
+.texto-anotacao::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  bottom: 10px;
+  width: 5px;
+  background-image: radial-gradient(#7b9aff 1.5px, transparent 1.5px);
+  background-size: 6px 32px;
+  background-repeat: repeat-y;
+}
+
+/* Hora e data */
+.anotacao-hora {
+  display: block;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* Controle de fonte */
+.font-size-control {
+  margin-top: 15px;
+  text-align: center;
+}
+.font-size-control label {
+  font-weight: 600;
+  margin-right: 8px;
+  color: #333;
+}
+#fontSizeSelect {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* 💠 Estilo especial para o botão "Registrar Presença" */
+#btn-registra {
+  background: linear-gradient(135deg, #555152, #2e2633); /* azul neon suave */
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 150, 255, 0.3);
+}
+
+/* 💎 Efeito ao passar o mouse */
+#btn-registra:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #3b5274, #221d34);
+  box-shadow: 0 6px 16px rgba(0, 180, 255, 0.5);
+}
+
+/* 🌙 Efeito ao clicar (pressionar) */
+#btn-registra:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 150, 255, 0.3);
+}
+
+/* 💠 Botões principais (Lista) */
+#btn-lista {
+  background: linear-gradient(135deg, #c83b78, #d73e8a);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 150, 255, 0.3);
+}
+
+/* 💎 Efeito ao passar o mouse */
+#btn-lista:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #fbc5d8, #e8cc9c);
+  box-shadow: 0 6px 16px rgba(0, 180, 255, 0.5);
+}
+
+/* 🌙 Efeito ao clicar */
+#btn-lista:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 150, 255, 0.3);
+}
+
+/* 💾 Botão de salvar presença (dentro do formulário) */
+#salvarBtn {
+  display: block;
+  margin: 20px auto;
+  background: linear-gradient(135deg, #34b65f, #26ac94); /* verde água vibrante */
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 28px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(56, 249, 215, 0.3);
+}
+
+/* ✨ Efeito ao passar o mouse */
+#salvarBtn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #25cbad, #67cc89);
+  box-shadow: 0 6px 16px rgba(56, 249, 215, 0.5);
+}
+
+/* 🖱️ Efeito ao clicar */
+#salvarBtn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(56, 249, 215, 0.3);
+}
+
+/* 🎨 Estilo para o controle de tamanho da letra */
+.font-size-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px 20px;
+  border-radius: 14px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.font-size-control label {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* 🌟 Corrige o texto "Tamanho da letra" */
+.font-size-control label {
+  color: #1a1a1a; /* preto suave para boa leitura */
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+/* 📅 Campo de data estilizado */
+#dataAnotacoes {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #2176ff;
+  background: #f9fbff;
+  font-weight: 500;
+  color: #1a1a1a;
+  box-shadow: 0 2px 6px rgba(33, 118, 255, 0.2);
+  transition: all 0.3s ease;
+}
+#dataAnotacoes:hover,
+#dataAnotacoes:focus {
+  border-color: #0b4f99;
+  box-shadow: 0 4px 10px rgba(33, 118, 255, 0.3);
+  outline: none;
+}
+
+/* 🎨 Botão "Ver Anotações Antigas" estilizado */
+#verAntigasBtn, #verAntigasBtn.btn {
+  background: linear-gradient(90deg, #689ed8, #4d4588);
+  color: #fff !important;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(33, 118, 255, 0.3);
+}
+#verAntigasBtn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #2176ff, #3372b5);
+  box-shadow: 0 6px 16px rgba(33, 118, 255, 0.4);
+}
+#verAntigasBtn:active {
+  transform: scale(0.95);
+}
+
+/* ✨ Seletor de tamanho de fonte */
+#fontSizeSelect {
+  background: linear-gradient(90deg, #db3dbc, #f893e0);
+  color: #101010;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(33, 118, 255, 0.3);
+  outline: none;
+  appearance: none;
+}
+#fontSizeSelect:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #2176ff, #0b4f99);
+  box-shadow: 0 6px 16px rgba(33, 118, 255, 0.4);
+}
+#fontSizeSelect:active {
+  transform: scale(0.96);
+}
+
+/* 🚪 Botão SAIR estilizado */
+#logout-btn {
+  background: linear-gradient(90deg, #0b4f99, #2176ff);
+  color: #fff !important;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(33, 118, 255, 0.3);
+}
+
+#logout-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #2176ff, #0b4f99);
+  box-shadow: 0 6px 16px rgba(33, 118, 255, 0.4);
+}
+
+#logout-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(33, 118, 255, 0.3);
+}
+
+/* 🗓️ Campo de data do filtro */
+#filtroData {
+  border: none;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-size: 15px;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+#filtroData:hover, #filtroData:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(33,118,255,0.3);
+}
+
+/* 🔽 Seletor de período */
+#filtroPeriodo {
+  border: none;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-size: 15px;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+#filtroPeriodo:hover, #filtroPeriodo:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(33,118,255,0.3);
+}
+
+/* 🔘 Botão Filtrar */
+#btnFiltrar {
+  background: linear-gradient(90deg, #0b4f99, #2176ff);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(33,118,255,0.3);
+}
+
+#btnFiltrar:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #2176ff, #0b4f99);
+  box-shadow: 0 6px 16px rgba(33,118,255,0.4);
+}
+
+/* ✏️ Botão Alterar */
+button.alterar-btn,
+#tabelaPresencas button {
+  background: linear-gradient(90deg, #5b0303, #a70000);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(33,118,255,0.3);
+}
+
+button.alterar-btn:hover,
+#tabelaPresencas button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #473f0d, #c9b503);
+}
+
+/* ===== Estilização moderna do select "Todos os períodos" ===== */
+#filtroPeriodo {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: #ffffff;
+  border: 2px solid #d6e2f3;
+  border-radius: 10px;
+  padding: 10px 40px 10px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #033760;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(11, 79, 153, 0.08);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%230b4f99' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+/* Hover / foco */
+#filtroPeriodo:hover {
+  border-color: #2176ff;
+  box-shadow: 0 6px 14px rgba(33, 118, 255, 0.16);
+}
+#filtroPeriodo:focus {
+  outline: none;
+  border-color: #0b4f99;
+  box-shadow: 0 0 0 3px rgba(33, 118, 255, 0.25);
+}
+
+/* Opções do menu suspenso */
+#filtroPeriodo option {
+  font-weight: 500;
+  color: #033760;
+  background-color: #ffffff;
+}
+
+/* Ajuste em telas menores */
+@media (max-width: 768px) {
+  #filtroPeriodo {
+    font-size: 14px;
+    padding: 8px 36px 8px 12px;
+  }
+}
+
+/* Centralizar o título "Registrar Presença" */
+#registro h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ====== 🌙 MODO ESCURO ====== */
+body.dark-mode {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+/* Cartões, painéis e containers */
+body.dark-mode .card,
+body.dark-mode .wrap,
+body.dark-mode .toolbar {
+  background: #1e1e1e;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+/* Campos de entrada e selects */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #2b2b2b;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+/* Botões */
+body.dark-mode button {
+  background: linear-gradient(135deg, #0d6efd, #0a58ca);
+  color: #fff;
+  border: none;
+}
+
+body.dark-mode button:hover {
+  background: linear-gradient(135deg, #2b7bff, #1556d1);
+}
+
+/* Botões especiais */
+body.dark-mode .btn-fontes {
+  background: linear-gradient(135deg, #005eff, #0085ff);
+  color: #fff;
+}
+
+body.dark-mode .btn-registrar {
+  background: linear-gradient(135deg, #444, #222);
+  color: #fff;
+}
+
+body.dark-mode .btn-lista {
+  background: linear-gradient(135deg, #c2185b, #ad1457);
+  color: #fff;
+}
+
+/* Tabela */
+body.dark-mode table {
+  background-color: #1f1f1f;
+  border-collapse: collapse;
+}
+
+body.dark-mode th {
+  background-color: #0d47a1;
+  color: #fff;
+}
+
+body.dark-mode td {
+  background-color: #262626;
+  color: #ddd;
+}
+
+/* Botão de alternância */
+.theme-toggle {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  background: #fff;
+}
+
+body.dark-mode .theme-toggle {
+  background: #333;
+  color: #ffd700;
+}
+
+.theme-toggle:hover {
+  transform: rotate(20deg);
+}
+
+.acoes-anotacao {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.acoes-anotacao button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn-editar {
+  background: #f7d067;
+}
+
+.btn-excluir {
+  background: #e57373;
+}
+
+.btn-editar:hover {
+  background: #f9e08c;
+}
+
+.btn-excluir:hover {
+  background: #ef9a9a;
+}
+
+#btnLimpar { display: none !important; }
+
 
