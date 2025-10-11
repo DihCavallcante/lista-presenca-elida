@@ -3,28 +3,37 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ADB Vila Élida — Presença</title>
+  <title>ADB Vila Élida – Presença</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://i.ibb.co/v6BD6D3h/logo.png?v=2">
   <link rel="shortcut icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
+  <!-- Chart.js para gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- jsPDF e autoTable para PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <!-- SheetJS para Excel -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
   <!-- Fundo -->
   <div class="bg"></div>
 
+  <!-- 🔔 Sistema de Notificações -->
+  <div id="notification-container"></div>
+
   <!-- Card central -->
   <div class="wrap">
     <div class="card">
-
-      <!-- Logo / título -->
+   
       <div class="card-top">
         <img class="logo" src="https://i.ibb.co/yF9CY2tV/327185183-739228714063067-4074704671844114300-n.jpg" alt="ADB Vila Élida">
         <h1 id="headline">Conecte-se</h1>
       </div>
 
-      <!-- === AREA AUTH: Login / Cadastro === -->
+      <!-- AREA AUTH: Login / Cadastro -->
       <div id="auth-area">
         <form id="auth-form" class="form">
           <input id="email" type="email" placeholder="E-mail" required autocomplete="username"/>
@@ -38,25 +47,43 @@
         <p id="auth-feedback" class="feedback"></p>
       </div>
 
-      <!-- === AREA PRESENCA === -->
       <div id="presenca-area" class="hidden">
+
+        <!-- ÁREA DE EMAIL E HORÁRIO -->
+        <div id="user-info-center" class="hidden">
+          <div class="user-email-display" id="user-email-center">email@exemplo.com</div>
+          <div class="user-time-display" id="hora-atual-center">00:00:00</div>
+        </div>
+
+        <!-- TOOLBAR REORGANIZADA -->
         <div class="toolbar">
           <div class="left">
-            <button class="btn ghost" id="btn-registra" onclick="mostrarPagina('registro')">📝 Registrar Presença</button>
-            <button class="btn ghost" id="btn-lista" onclick="mostrarPagina('lista')">📋 Lista</button>
+            <button id="btn-admin-access" class="btn ghost admin-btn hidden">
+              <span class="icon">👑</span> Admin
+            </button>
+            
+            <button class="btn ghost" id="btn-registra">📝 Registrar Presença</button>
+            <button class="btn ghost" id="btn-lista">📋 Lista</button>
+            <button class="btn ghost" id="btn-anotacoes">🗒️ Anotações</button>
+            
+            <!-- 🆕 BOTÃO RELATÓRIOS -->
+            <button class="btn ghost" id="btn-relatorios">📊 Relatórios</button>
+            
+            <div class="font-menu">
+              <button class="font-button">✏️ Fontes</button>
+              <div class="font-list hidden" id="lista-fontes"></div>
+            </div>
 
-           <div class="font-menu">
-  <button class="font-button">🎨 Fontes</button>
-  <div class="font-list hidden" id="lista-fontes"></div>
-</div>
-<button id="toggle-theme" class="theme-toggle">
-  🌞 / 🌙
-</button>
-</div>
-          <div class="right">
-            <span id="user-email" class="small muted"></span>
+            <div class="palette-menu">
+              <button class="palette-button" id="btn-paletas">🎨 Temas</button>
+              <div class="palette-panel hidden" id="painel-paletas">
+                <h3 style="text-align:center; margin-bottom:15px; font-size:16px;">Escolha sua paleta</h3>
+                <div class="palette-grid"></div>
+              </div>
+            </div>
+
+            <button id="toggle-theme" class="theme-toggle">🌞 / 🌙</button>
             <button class="btn ghost" id="logout-btn">Sair</button>
-            <button class="btn ghost" id="btnLimpar">Limpar Lista</button>
           </div>
         </div>
 
@@ -65,21 +92,21 @@
           <section id="registro" class="pagina ativa">
             <h2>Registrar Presença</h2>
             <form id="formPresenca" class="form">
-              <input id="nome" name="nome" placeholder="Nome"  />
+              <input id="nome" name="nome" placeholder="Nome" required/>
               <input id="acompanhante" name="acompanhante" placeholder="Acompanhante (opcional)" />
               <input id="telefone" name="telefone" type="tel" placeholder="Telefone" />
               <input id="endereco" name="endereco" type="text" placeholder="Endereço" />
               <div class="row">
-                <select id="vinculo" name="vinculo" >
+                <select id="vinculo" name="vinculo">
                   <option value="" disabled selected>Selecione</option>
                   <option value="Congregacao">Congregação</option>
-                  <option value="OutraReligiao">Outra religião</option>
-                  <option value="SemIgreja">Sem igreja</option>
+                  <option value="Outra Religiao">Outra religião</option>
+                  <option value="Sem Igreja">Sem igreja</option>
                 </select>
                 <input id="vinculoExtra" name="vinculoExtra" placeholder="Detalhes" />
               </div>
               <div class="row">
-                <select id="tipo" name="tipo" >
+                <select id="tipo" name="tipo">
                   <option value="" disabled selected>Selecione</option>
                   <option value="Convidado">Convidado(a) por</option>
                   <option value="Visitante">Visitante</option>
@@ -87,83 +114,226 @@
                 </select>
                 <input id="tipoExtra" name="tipoExtra" placeholder="Detalhes" />
               </div>
-             <button id="salvarBtn" class="btn">Registrar Presença</button>
+              <button id="salvarBtn" class="btn">Registrar Presença</button>
             </form>
           </section>
 
           <!-- Lista -->
           <section id="lista" class="pagina">
             <h2>Lista de Presença</h2>
-            <div class="filtros">
-              <input id="filtroData" type="date"/>
-              <!-- Novo seletor de período -->
-              <select id="filtroPeriodo">
-                <option value="">Todos os períodos</option>
-                <option value="Madrugada">Madrugada</option>
-                <option value="Manhã">Manhã</option>
-                <option value="Tarde">Tarde</option>
-                <option value="Noite">Noite</option>
-              </select>
-              <button class="btn" id="btnFiltrar">Filtrar</button>
+            
+            <!-- 🆕 BOTÕES DE EXPORTAÇÃO (MOVIDOS PARA CIMA) -->
+            <div class="export-buttons">
+              <button class="btn export-btn" id="btnExportExcel">
+                📥 Exportar Excel
+              </button>
+              <button class="btn export-btn" id="btnExportPDF">
+                📄 Exportar PDF
+              </button>
             </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Acompanhante</th>
-                    <th>Telefone</th>
-                    <th>Endereço</th>
-                    <th>Vínculo</th>
-                    <th>Detalhe Extra</th>
-                    <th>Tipo</th> 
-                    <th>Detalhe Extra</th>
-                    <th>Data</th> 
-                    <th>Hora</th>
-                    <th>Período</th>
-                    <th>Ações</th>   
-                  </tr>
-                </thead>
-                <tbody id="tabelaPresencas"></tbody>
-              </table>
+
+            <!-- TABELA (AGORA VEM ANTES DOS FILTROS) -->
+            <div class="table-wrap" id="lista">
+              <table id="tabelaPresencas-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Acompanhante</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Vínculo</th>
+                    <th>Detalhe Extra</th>
+                    <th>Tipo</th>
+                    <th>Detalhe Extra</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Período</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaPresencas"></tbody>
+              </table>
             </div>
             <p id="contador" class="muted"></p>
+
+            <!-- 🔽 FILTROS AVANÇADOS MELHORADOS (AGORA EMBAIXO) -->
+            <div class="filtros-avancados" style="margin-top: 30px;">
+              <h3 style="grid-column: 1 / -1; text-align: center; margin-bottom: 10px; color: var(--cor-primaria);">
+                🔍 Filtros de Busca
+              </h3>
+              <div class="filtro-grupo">
+                <label>📅 Data Inicial</label>
+                <input id="filtroDataInicio" type="date"/>
+              </div>
+              <div class="filtro-grupo">
+                <label>📅 Data Final</label>
+                <input id="filtroDataFim" type="date"/>
+              </div>
+              <div class="filtro-grupo">
+                <label>🕐 Período</label>
+                <select id="filtroPeriodo">
+                  <option value="">Todos os períodos</option>
+                  <option value="Madrugada">Madrugada</option>
+                  <option value="Manhã">Manhã</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noite">Noite</option>
+                </select>
+              </div>
+              <div class="filtro-grupo">
+                <label>🔍 Nome</label>
+                <input id="filtroNome" type="text" placeholder="Buscar por nome..."/>
+              </div>
+              <div class="filtro-grupo">
+                <label>📞 Telefone</label>
+                <input id="filtroTelefone" type="text" placeholder="Buscar telefone..."/>
+              </div>
+              <div class="filtro-grupo">
+                <label>🏠 Vínculo</label>
+                <select id="filtroVinculo">
+                  <option value="">Todos</option>
+                  <option value="Congregacao">Congregação</option>
+                  <option value="Outra Religiao">Outra religião</option>
+                  <option value="Sem Igreja">Sem igreja</option>
+                </select>
+              </div>
+              <div class="filtro-acoes">
+                <button class="btn" id="btnFiltrar">🔍 Filtrar</button>
+                <button class="btn secondary" id="btnLimparFiltros">🔄 Limpar</button>
+              </div>
+            </div>
           </section>
-<!-- 🗒️ seção de Anotações -->
-<section id="anotacoes" class="pagina">
-  <h2>Minhas Anotações</h2>
-  <textarea id="campoAnotacoes" placeholder="Escreva suas anotações aqui..."></textarea>
-  <button id="salvarAnotacao" class="btn">Salvar Anotações</button>
-  <p id="feedbackAnotacao" class="small muted"></p>
 
-  <!-- NOVA ÁREA DE HISTÓRICO -->
-  <div class="historico-anotacoes">
-    <h3>📅 Minhas Anotações</h3>
-    <div class="filtros-anotacoes">
-      <input type="date" id="dataAnotacoes">
-      <button id="verAntigasBtn" class="btn">Ver Anotações Antigas</button>
-    </div>
-    <div class="font-size-control">
-  <label for="fontSizeSelect">Tamanho da letra:</label>
-  <select id="fontSizeSelect">
-    <option value="18px">Pequeno</option>
-    <option value="20px" selected>Médio</option>
-    <option value="24px">Grande</option>
-    <option value="28px">Muito grande</option>
-  </select>
-</div>
+          <!-- 🆕 SEÇÃO DE RELATÓRIOS -->
+          <section id="relatorios" class="pagina">
+            <h2>📊 Relatórios e Estatísticas</h2>
+            
+            <div class="relatorios-container">
+              <!-- Cards de Estatísticas -->
+              <div class="stats-cards">
+                <div class="stat-card">
+                  <div class="stat-icon">👥</div>
+                  <div class="stat-info">
+                    <h3 id="stat-total">0</h3>
+                    <p>Total de Presenças</p>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-icon">📅</div>
+                  <div class="stat-info">
+                    <h3 id="stat-hoje">0</h3>
+                    <p>Hoje</p>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-icon">📆</div>
+                  <div class="stat-info">
+                    <h3 id="stat-mes">0</h3>
+                    <p>Este Mês</p>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-icon">🎯</div>
+                  <div class="stat-info">
+                    <h3 id="stat-media">0</h3>
+                    <p>Média Diária</p>
+                  </div>
+                </div>
+              </div>
 
-    <div id="listaAnotacoes" class="lista-anotacoes"></div>
-  </div>
-</section>
+              <!-- Filtros de Período para Gráficos -->
+              <div class="filtros-graficos">
+                <label>Período do Relatório:</label>
+                <select id="periodoRelatorio">
+                  <option value="7">Últimos 7 dias</option>
+                  <option value="30" selected>Últimos 30 dias</option>
+                  <option value="90">Últimos 90 dias</option>
+                  <option value="365">Último ano</option>
+                </select>
+                <button class="btn" id="btnAtualizarGraficos">🔄 Atualizar</button>
+              </div>
+
+              <!-- Gráficos -->
+              <div class="graficos-grid">
+                <div class="grafico-card">
+                  <h3>📈 Presenças por Período do Dia</h3>
+                  <canvas id="graficoPeriodo"></canvas>
+                </div>
+                
+                <div class="grafico-card">
+                  <h3>📊 Presenças nos Últimos Dias</h3>
+                  <canvas id="graficoTemporal"></canvas>
+                </div>
+                
+                <div class="grafico-card">
+                  <h3>🏠 Distribuição por Vínculo</h3>
+                  <canvas id="graficoVinculo"></canvas>
+                </div>
+                
+                <div class="grafico-card">
+                  <h3>👤 Tipos de Visitantes</h3>
+                  <canvas id="graficoTipo"></canvas>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Anotações -->
+          <section id="anotacoes" class="pagina">
+            <h2>Minhas Anotações</h2>
+            <textarea id="campoAnotacoes" placeholder="Escreva suas anotações aqui..."></textarea>
+            <button id="salvarAnotacao" class="btn">Salvar Anotações</button>
 
             <p id="feedbackAnotacao" class="small muted"></p>
+
+            <div class="historico-anotacoes">
+              <h3>📅 Minhas Anotações</h3>
+              <div class="filtros-anotacoes">
+                <input type="date" id="dataAnotacoes">
+                <button id="verAntigasBtn" class="btn">Ver Anotações</button>
+              </div>
+              <div class="font-size-control">
+                <label for="fontSizeSelect">✨ Escolha o Tamanho da Letra</label>
+                <select id="fontSizeSelect" style="display:none;">
+                  <option value="16px">Pequeno</option>
+                  <option value="20px" selected>Médio</option>
+                  <option value="24px">Grande</option>
+                  <option value="28px">Muito Grande</option>
+                </select>
+                <div class="font-size-options">
+                  <div class="font-size-card" data-size="16px">
+                    <span class="font-size-icon">🔤</span>
+                    <div class="font-size-label">Pequeno</div>
+                    <div class="font-size-value">16px</div>
+                  </div>
+                  <div class="font-size-card active" data-size="20px">
+                    <span class="font-size-icon">📝</span>
+                    <div class="font-size-label">Médio</div>
+                    <div class="font-size-value">20px</div>
+                  </div>
+                  <div class="font-size-card" data-size="24px">
+                    <span class="font-size-icon">📄</span>
+                    <div class="font-size-label">Grande</div>
+                    <div class="font-size-value">24px</div>
+                  </div>
+                  <div class="font-size-card" data-size="28px">
+                    <span class="font-size-icon">📋</span>
+                    <div class="font-size-label">Muito Grande</div>
+                    <div class="font-size-value">28px</div>
+                  </div>
+                </div>
+              </div>
+              <div id="listaAnotacoes" class="lista-anotacoes"></div>
+            </div>
           </section>
         </main>
-      </div>
 
-    </div>
-  </div>
+      </div> <!-- FIM de presenca-area -->
+
+    </div> <!-- FIM do card -->
+  </div> <!-- FIM do wrap -->
 
   <!-- Footer -->
   <footer>
