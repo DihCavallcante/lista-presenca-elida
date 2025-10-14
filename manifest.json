@@ -1,0 +1,43 @@
+{
+  "name": "ADB Vila Élida - Sistema de Presença",
+  "short_name": "ADB Presença",
+  "description": "Sistema de gerenciamento de presenças da ADB Vila Élida",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b4f99",
+  "theme_color": "#0b4f99",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "https://i.ibb.co/v6BD6D3h/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/v6BD6D3h/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "shortcuts": [
+    {
+      "name": "Registrar Presença",
+      "short_name": "Registrar",
+      "description": "Registrar nova presença rapidamente",
+      "url": "/?page=registro",
+      "icons": [{"src": "https://i.ibb.co/v6BD6D3h/logo.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Ver Lista",
+      "short_name": "Lista",
+      "description": "Ver lista de presenças",
+      "url": "/?page=lista",
+      "icons": [{"src": "https://i.ibb.co/v6BD6D3h/logo.png", "sizes": "192x192"}]
+    }
+  ]
+}

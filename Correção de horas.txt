@@ -1,0 +1,108 @@
+// =================== 🛠️ BOTÃO DE CORREÇÃO COM DEBUG ===================
+if (btnRelatorios) {
+  const btnCorrigir = document.createElement('button');
+  btnCorrigir.className = 'btn ghost';
+  btnCorrigir.innerHTML = '🛠️ Corrigir Datas';
+  btnCorrigir.style.cssText = 'background: #ff9800 !important; color: white !important;';
+  
+  btnRelatorios.parentNode.insertBefore(btnCorrigir, btnRelatorios.nextSibling);
+  
+  btnCorrigir.addEventListener('click', async () => {
+    console.log('🔵 Botão clicado!');
+    
+    if (!auth.currentUser) {
+      console.error('❌ Usuário não está logado!');
+      mostrarNotificacao('❌ Você precisa estar logado!', 'error');
+      return;
+    }
+    
+    console.log('✅ Usuário logado:', auth.currentUser.email);
+    
+    if (!confirm('⚠️ Corrigir datas da madrugada?')) {
+      console.log('❌ Usuário cancelou');
+      return;
+    }
+    
+    btnCorrigir.textContent = '⏳ Aguarde...';
+    btnCorrigir.disabled = true;
+    
+    try {
+      console.log('🔵 Buscando registros...');
+      const snap = await getDocs(collection(db, 'presencas'));
+      console.log('📋 Total de registros:', snap.docs.length);
+      
+      let corrigidos = 0;
+      let tentativas = 0;
+      
+      for (const docSnap of snap.docs) {
+        const dados = docSnap.data();
+        const dataAtual = dados.data;
+        const horaAtual = dados.hora;
+        
+        if (!dataAtual || !horaAtual) continue;
+        
+        const horaNum = parseInt(horaAtual.substring(0, 2));
+        
+        if (horaNum >= 0 && horaNum <= 5) {
+          tentativas++;
+          console.log(`🌙 Registro ${tentativas}:`, {
+            id: docSnap.id,
+            nome: dados.nome,
+            dataAtual,
+            horaAtual
+          });
+          
+          const [d, m, a] = dataAtual.split('/');
+          const dataObj = new Date(parseInt(a), parseInt(m) - 1, parseInt(d));
+          dataObj.setDate(dataObj.getDate() + 1);
+          
+          const novoDia = String(dataObj.getDate()).padStart(2, '0');
+          const novoMes = String(dataObj.getMonth() + 1).padStart(2, '0');
+          const novoAno = dataObj.getFullYear();
+          const novaData = `${novoDia}/${novoMes}/${novoAno}`;
+          
+          console.log(`🔄 Tentando atualizar para: ${novaData}`);
+          
+          try {
+            const docRef = doc(db, 'presencas', docSnap.id);
+            await updateDoc(docRef, {
+              data: novaData
+            });
+            console.log('✅ Atualizado com sucesso!');
+            corrigidos++;
+          } catch (updateErr) {
+            console.error('❌ Erro ao atualizar este registro:', updateErr);
+            console.error('Código:', updateErr.code);
+            console.error('Mensagem:', updateErr.message);
+          }
+        }
+      }
+      
+      console.log(`📊 Resultado: ${corrigidos} de ${tentativas} atualizados`);
+      
+      btnCorrigir.textContent = '🛠️ Corrigir Datas';
+      btnCorrigir.disabled = false;
+      
+      if (corrigidos > 0) {
+        mostrarNotificacao(`✅ ${corrigidos} registros corrigidos!`, 'success');
+        setTimeout(() => {
+          console.log('🔄 Recarregando lista...');
+          listarPresencas();
+        }, 1500);
+      } else if (tentativas > 0) {
+        mostrarNotificacao(`❌ Nenhum registro foi atualizado (${tentativas} tentativas)`, 'error');
+      } else {
+        mostrarNotificacao('ℹ️ Nenhum registro de madrugada encontrado', 'info');
+      }
+      
+    } catch (err) {
+      console.error('❌ ERRO GERAL:', err);
+      console.error('Código:', err.code);
+      console.error('Mensagem:', err.message);
+      console.error('Stack:', err.stack);
+      mostrarNotificacao('❌ Erro: ' + err.message, 'error');
+      btnCorrigir.textContent = '🛠️ Corrigir Datas';
+      btnCorrigir.disabled = false;
+    }
+  });
+}

@@ -1,0 +1,6 @@
+| Tipo de mudança                         | Comando                            |
+| --------------------------------------- | ---------------------------------- |
+| Mudou HTML, CSS, JS                     | firebase deploy --only hosting   |
+| Mudou regras do banco (Firestore Rules) | firebase deploy --only firestore |
+| Mudou funções do backend                | firebase deploy --only functions |
+| Mudou várias partes                     | firebase deploy                  |

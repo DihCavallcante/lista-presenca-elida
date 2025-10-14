@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <!-- PWA Meta Tags -->
+<meta name="description" content="Sistema de gerenciamento de presenças da ADB Vila Élida">
+<meta name="theme-color" content="#0b4f99">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ADB Presença">
+
+<!-- Manifest do PWA -->
+<link rel="manifest" href="manifest.json">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ADB Vila Élida – Presença</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://i.ibb.co/v6BD6D3h/logo.png?v=2">
+  <link rel="shortcut icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/v6BD6D3h/logo.png">
+  <!-- Chart.js para gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- jsPDF e autoTable para PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <!-- SheetJS para Excel -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <!-- Fundo -->
+  <div class="bg"></div>
+
+  <!-- 🔔 Sistema de Notificações -->
+  <div id="notification-container"></div>
+
+  <!-- Card central -->
+  <div class="wrap">
+    <div class="card">
+   
+      <div class="card-top">
+        <img class="logo" src="https://i.ibb.co/yF9CY2tV/327185183-739228714063067-4074704671844114300-n.jpg" alt="ADB Vila Élida">
+        <h1 id="headline">Conecte-se</h1>
+      </div>
+
+      <!-- AREA AUTH: Login / Cadastro -->
+      <div id="auth-area">
+        <form id="auth-form" class="form">
+          <input id="email" type="email" placeholder="E-mail" required autocomplete="username"/>
+          <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
+          <button id="submit-btn" class="btn primary">Entrar</button>
+        </form>
+        <p class="small" id="auth-switch">
+          <span id="auth-msg">Não possui conta?</span>
+          <a href="#" id="switch-link">Cadastre-se</a>
+        </p>
+        <p id="auth-feedback" class="feedback"></p>
+      </div>
+
+      <div id="presenca-area" class="hidden">
+
+        <!-- ÁREA DE EMAIL E HORÁRIO -->
+        <div id="user-info-center" class="hidden">
+          <div class="user-email-display" id="user-email-center">email@exemplo.com</div>
+          <div class="user-time-display" id="hora-atual-center">00:00:00</div>
+        </div>
+
+        <!-- TOOLBAR REORGANIZADA -->
+        <div class="toolbar">
+          <div class="left">
+            <button id="btn-admin-access" class="btn ghost admin-btn hidden">
+              <span class="icon">👑</span> Admin
+            </button>
+            
+            <button class="btn ghost" id="btn-registra">📝 Registrar Presença</button>
+            <button class="btn ghost" id="btn-lista">📋 Lista</button>
+            <button class="btn ghost" id="btn-anotacoes">🗒️ Anotações</button>
+            
+            <!-- 🆕 BOTÃO RELATÓRIOS -->
+            <button class="btn ghost" id="btn-relatorios">📊 Relatórios</button>
+            
+            <div class="font-menu">
+              <button class="font-button">✏️ Fontes</button>
+              <div class="font-list hidden" id="lista-fontes"></div>
+            </div>
+
+            <div class="palette-menu">
+              <button class="palette-button" id="btn-paletas">🎨 Temas</button>
+              <div class="palette-panel hidden" id="painel-paletas">
+                <h3 style="text-align:center; margin-bottom:15px; font-size:16px;">Escolha sua paleta</h3>
+                <div class="palette-grid"></div>
+              </div>
+            </div>
+
+            <button id="toggle-theme" class="theme-toggle">🌞 / 🌙</button>
+            <button class="btn ghost" id="logout-btn">Sair</button>
+          </div>
+        </div>
+
+        <main class="presenca-main">
+          <!-- Registro -->
+          <section id="registro" class="pagina ativa">
+            <h2>Registrar Presença</h2>
+            <form id="formPresenca" class="form">
+              <input id="nome" name="nome" placeholder="Nome" required/>
+              <input id="acompanhante" name="acompanhante" placeholder="Acompanhante (opcional)" />
+              <input id="telefone" name="telefone" type="tel" placeholder="Telefone" />
+              <input id="endereco" name="endereco" type="text" placeholder="Endereço" />
+              <div class="row">
+                <select id="vinculo" name="vinculo">
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="Congregacao">Congregação</option>
+                  <option value="Outra Religiao">Outra religião</option>
+                  <option value="Sem Igreja">Sem igreja</option>
+                </select>
+                <input id="vinculoExtra" name="vinculoExtra" placeholder="Detalhes" />
+              </div>
+              <div class="row">
+                <select id="tipo" name="tipo">
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="Convidado">Convidado(a) por</option>
+                  <option value="Visitante">Visitante</option>
+                  <option value="Membro">Membro</option>
+                </select>
+                <input id="tipoExtra" name="tipoExtra" placeholder="Detalhes" />
+              </div>
+              <button id="salvarBtn" class="btn">Registrar Presença</button>
+            </form>
+          </section>
+
+          <!-- Lista -->
+          <section id="lista" class="pagina">
+            <h2>Lista de Presença</h2>
+            
+            <!-- 🆕 BOTÕES DE EXPORTAÇÃO (MOVIDOS PARA CIMA) -->
+            <div class="export-buttons">
+              <button class="btn export-btn" id="btnExportExcel">
+                📥 Exportar Excel
+              </button>
+              <button class="btn export-btn" id="btnExportPDF">
+                📄 Exportar PDF
+              </button>
+            </div>
+
+            <!-- TABELA (AGORA VEM ANTES DOS FILTROS) -->
+            <div class="table-wrap" id="lista">
+              <table id="tabelaPresencas-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Acompanhante</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Vínculo</th>
+                    <th>Detalhe Extra</th>
+                    <th>Tipo</th>
+                    <th>Detalhe Extra</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Período</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaPresencas"></tbody>
+              </table>
+            </div>
+            <p id="contador" class="muted"></p>
+
+            <!-- 🔽 FILTROS AVANÇADOS MELHORADOS (AGORA EMBAIXO) -->
+            <div class="filtros-avancados" style="margin-top: 30px;">
+              <h3 style="grid-column: 1 / -1; text-align: center; margin-bottom: 10px; color: var(--cor-primaria);">
+                🔍 Filtros de Busca
+              </h3>
+              <div class="filtro-grupo">
+                <label>📅 Data Inicial</label>
+                <input id="filtroDataInicio" type="date"/>
+              </div>
+              <div class="filtro-grupo">
+                <label>📅 Data Final</label>
+                <input id="filtroDataFim" type="date"/>
+              </div>
+              <div class="filtro-grupo">
+                <label>🕐 Período</label>
+                <select id="filtroPeriodo">
+                  <option value="">Todos os períodos</option>
+                  <option value="Madrugada">Madrugada</option>
+                  <option value="Manhã">Manhã</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noite">Noite</option>
+                </select>
+              </div>
+              <div class="filtro-grupo">
+                <label>🔍 Nome</label>
+                <input id="filtroNome" type="text" placeholder="Buscar por nome..."/>
+              </div>
+              <div class="filtro-grupo">
+                <label>📞 Telefone</label>
+                <input id="filtroTelefone" type="text" placeholder="Buscar telefone..."/>
+              </div>
+              <div class="filtro-grupo">
+                <label>🏠 Vínculo</label>
+                <select id="filtroVinculo">
+                  <option value="">Todos</option>
+                  <option value="Congregacao">Congregação</option>
+                  <option value="Outra Religiao">Outra religião</option>
+                  <option value="Sem Igreja">Sem igreja</option>
+                </select>
+              </div>
+              <div class="filtro-acoes">
+                <button class="btn" id="btnFiltrar">🔍 Filtrar</button>
+                <button class="btn secondary" id="btnLimparFiltros">🔄 Limpar</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 🆕 SEÇÃO DE RELATÓRIOS -->
+          <section id="relatorios" class="pagina">
+            <h2>📊 Relatórios e Estatísticas</h2>
+            
+            <div class="relatorios-container">
+              <!-- Cards de Estatísticas -->
+              <div class="stats-cards">
+                <div class="stat-card">
+                  <div class="stat-icon">👥</div>
+                  <div class="stat-info">
+                    <h3 id="stat-total">0</h3>
+                    <p>Total de Presenças</p>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-icon">📅</div>
+                  <div class="stat-info">
+                    <h3 id="stat-hoje">0</h3>
+                    <p>Hoje</p>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-icon">📆</div>
+                  <div class="stat-info">
+                    <h3 id="stat-mes">0</h3>
+                    <p>Este Mês</p>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-icon">🎯</div>
+                  <div class="stat-info">
+                    <h3 id="stat-media">0</h3>
+                    <p>Média Diária</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Filtros de Período para Gráficos -->
+              <div class="filtros-graficos">
+                <label>Período do Relatório:</label>
+                <select id="periodoRelatorio">
+                  <option value="7">Últimos 7 dias</option>
+                  <option value="30" selected>Últimos 30 dias</option>
+                  <option value="90">Últimos 90 dias</option>
+                  <option value="365">Último ano</option>
+                </select>
+                <button class="btn" id="btnAtualizarGraficos">🔄 Atualizar</button>
+              </div>
+
+              <!-- Gráficos -->
+              <div class="graficos-grid">
+                <div class="grafico-card">
+                  <h3>📈 Presenças por Período do Dia</h3>
+                  <canvas id="graficoPeriodo"></canvas>
+                </div>
+                
+                <div class="grafico-card">
+                  <h3>📊 Presenças nos Últimos Dias</h3>
+                  <canvas id="graficoTemporal"></canvas>
+                </div>
+                
+                <div class="grafico-card">
+                  <h3>🏠 Distribuição por Vínculo</h3>
+                  <canvas id="graficoVinculo"></canvas>
+                </div>
+                
+                <div class="grafico-card">
+                  <h3>👤 Tipos de Visitantes</h3>
+                  <canvas id="graficoTipo"></canvas>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Anotações -->
+          <section id="anotacoes" class="pagina">
+            <h2>Minhas Anotações</h2>
+            <textarea id="campoAnotacoes" placeholder="Escreva suas anotações aqui..."></textarea>
+            <button id="salvarAnotacao" class="btn">Salvar Anotações</button>
+
+            <p id="feedbackAnotacao" class="small muted"></p>
+
+            <div class="historico-anotacoes">
+              <h3>📅 Minhas Anotações</h3>
+              <div class="filtros-anotacoes">
+                <input type="date" id="dataAnotacoes">
+                <button id="verAntigasBtn" class="btn">Ver Anotações</button>
+              </div>
+              <div class="font-size-control">
+                <label for="fontSizeSelect">✨ Escolha o Tamanho da Letra</label>
+                <select id="fontSizeSelect" style="display:none;">
+                  <option value="16px">Pequeno</option>
+                  <option value="20px" selected>Médio</option>
+                  <option value="24px">Grande</option>
+                  <option value="28px">Muito Grande</option>
+                </select>
+                <div class="font-size-options">
+                  <div class="font-size-card" data-size="16px">
+                    <span class="font-size-icon">🔤</span>
+                    <div class="font-size-label">Pequeno</div>
+                    <div class="font-size-value">16px</div>
+                  </div>
+                  <div class="font-size-card active" data-size="20px">
+                    <span class="font-size-icon">📝</span>
+                    <div class="font-size-label">Médio</div>
+                    <div class="font-size-value">20px</div>
+                  </div>
+                  <div class="font-size-card" data-size="24px">
+                    <span class="font-size-icon">📄</span>
+                    <div class="font-size-label">Grande</div>
+                    <div class="font-size-value">24px</div>
+                  </div>
+                  <div class="font-size-card" data-size="28px">
+                    <span class="font-size-icon">📋</span>
+                    <div class="font-size-label">Muito Grande</div>
+                    <div class="font-size-value">28px</div>
+                  </div>
+                </div>
+              </div>
+              <div id="listaAnotacoes" class="lista-anotacoes"></div>
+            </div>
+          </section>
+        </main>
+
+      </div> <!-- FIM de presenca-area -->
+
+    </div> <!-- FIM do card -->
+  </div> <!-- FIM do wrap -->
+
+  <!-- Footer -->
+  <footer>
+    <p>ADB Vila Élida 2025</p>
+    <div class="logos-rodape">
+      <a href="#"><img src="https://i.ibb.co/RGP1Sp3h/uma-removebg-preview.png" alt="Logo 1"></a>
+      <a href="#"><img src="https://i.ibb.co/WWTHBZv1/ufadeb-removebg-preview.png" alt="Logo 2"></a>
+      <a href="#"><img src="https://i.ibb.co/wND86fHB/Joias-removebg-preview.png" alt="Logo 3"></a>
+      <a href="#"><img src="https://i.ibb.co/bgPqQ3mf/kids-removebg-preview.png" alt="Logo 4"></a>
+    </div>
+  </footer>
+
+ <script type="module" src="script.js"></script>
+  
+  <!-- ============================================
+       📱 PWA: SERVICE WORKER + BOTÃO DE INSTALAÇÃO
+       ============================================ -->
+<script>
+// =================== 🔧 REGISTRO DO SERVICE WORKER ===================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+      .then((reg) => {
+        console.log('✅ Service Worker registrado com sucesso!', reg.scope);
+      })
+      .catch((err) => {
+        console.error('❌ Erro ao registrar Service Worker:', err);
+      });
+  });
+}
+
+// =================== 📱 SISTEMA DE INSTALAÇÃO DO PWA ===================
+let deferredPrompt = null;
+let installBtn = null;
+
+// 🎨 Função para criar o botão de instalação
+function criarBotaoInstalacao() {
+  // Remove botão existente se houver
+  if (installBtn && installBtn.parentNode) {
+    installBtn.remove();
+  }
+  
+  // Cria novo botão com ícone e texto
+  installBtn = document.createElement('button');
+  installBtn.innerHTML = '📱 <span>Instalar App</span>';
+  installBtn.id = 'install-pwa-btn';
+  installBtn.className = 'install-pwa-button';
+  installBtn.setAttribute('aria-label', 'Instalar aplicativo');
+  
+  // 🎯 Evento de clique no botão
+  installBtn.onclick = async () => {
+    if (!deferredPrompt) {
+      console.warn('⚠️ Prompt de instalação não disponível');
+      alert('❌ O app já está instalado ou seu navegador não suporta instalação automática.\n\n💡 Tente pelo menu do navegador: ⋮ → "Adicionar à tela inicial"');
+      return;
+    }
+    
+    try {
+      console.log('🚀 Iniciando instalação...');
+      
+      // Mostra o prompt de instalação nativo
+      await deferredPrompt.prompt();
+      
+      // Aguarda a escolha do usuário
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      console.log(`📊 Resultado da instalação: ${outcome}`);
+      
+      if (outcome === 'accepted') {
+        console.log('🎉 Usuário aceitou a instalação!');
+        
+        // Mostra mensagem de sucesso
+        setTimeout(() => {
+          alert('✅ App instalado com sucesso!\n\n📱 Você pode encontrá-lo na tela inicial do seu dispositivo.');
+        }, 500);
+      } else {
+        console.log('❌ Usuário cancelou a instalação');
+      }
+      
+      // Limpa o prompt
+      deferredPrompt = null;
+      
+      // Remove o botão
+      if (installBtn && installBtn.parentNode) {
+        installBtn.remove();
+        installBtn = null;
+      }
+    } catch (err) {
+      console.error('❌ Erro ao instalar PWA:', err);
+      alert('⚠️ Erro ao tentar instalar o aplicativo.\n\nTente novamente ou use o menu do navegador.');
+    }
+  };
+  
+  // Adiciona o botão ao body
+  document.body.appendChild(installBtn);
+  console.log('✅ Botão de instalação criado e adicionado');
+}
+
+// 🎯 Escuta o evento de prompt de instalação
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('🎯 Evento beforeinstallprompt capturado!');
+  
+  // Previne o banner automático do navegador
+  e.preventDefault();
+  
+  // Salva o evento para usar depois
+  deferredPrompt = e;
+  
+  // Cria o botão de instalação
+  criarBotaoInstalacao();
+});
+
+// 🎉 Remove botão após instalação bem-sucedida
+window.addEventListener('appinstalled', () => {
+  console.log('🎉 PWA instalado com sucesso via evento appinstalled!');
+  
+  // Limpa variáveis
+  deferredPrompt = null;
+  
+  // Remove o botão se ainda existir
+  if (installBtn && installBtn.parentNode) {
+    installBtn.remove();
+    installBtn = null;
+  }
+});
+
+// 🔍 DIAGNÓSTICO: Verifica suporte e status do PWA
+console.log('═══════════════════════════════════════');
+console.log('📱 DIAGNÓSTICO PWA - ADB Vila Élida');
+console.log('═══════════════════════════════════════');
+console.log('✓ Service Worker suportado:', 'serviceWorker' in navigator);
+console.log('✓ Protocolo seguro (HTTPS):', location.protocol === 'https:');
+console.log('✓ Modo standalone:', window.matchMedia('(display-mode: standalone)').matches);
+console.log('✓ URL atual:', location.href);
+console.log('═══════════════════════════════════════');
+
+// Se já estiver instalado, não mostra o botão
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  console.log('✅ App já está rodando em modo instalado!');
+}
+</script>
+
+<!-- ============================================
+     🎨 CSS DO BOTÃO DE INSTALAÇÃO
+     ============================================ -->
+<style>
+.install-pwa-button {
+  /* 📍 Posicionamento */
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 99999 !important;
+  
+  /* 🎨 Visual */
+  background: linear-gradient(135deg, #0b4f99, #2176ff) !important;
+  color: white !important;
+  border: none !important;
+  padding: 14px 28px !important;
+  border-radius: 30px !important;
+  
+  /* 📝 Texto */
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  font-family: 'Inter', system-ui, Arial, sans-serif !important;
+  
+  /* 🖱️ Interação */
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+  
+  /* ✨ Efeitos */
+  box-shadow: 0 6px 20px rgba(11, 79, 153, 0.5) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  backdrop-filter: blur(10px) !important;
+  
+  /* 📐 Layout */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  
+  /* 🌟 Animação de destaque */
+  animation: pulseInstall 2s infinite !important;
+}
+
+/* 🎯 Hover effect */
+.install-pwa-button:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(33, 118, 255, 0.7) !important;
+  background: linear-gradient(135deg, #2176ff, #4a90ff) !important;
+}
+
+/* 👆 Active effect */
+.install-pwa-button:active {
+  transform: translateY(-1px) scale(0.98) !important;
+  box-shadow: 0 4px 15px rgba(11, 79, 153, 0.6) !important;
+}
+
+/* ✨ Animação de pulso */
+@keyframes pulseInstall {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(11, 79, 153, 0.5);
+  }
+  50% {
+    box-shadow: 0 6px 30px rgba(33, 118, 255, 0.9);
+  }
+}
+
+/* 📱 RESPONSIVO - Mobile */
+@media (max-width: 768px) {
+  .install-pwa-button {
+    bottom: 15px !important;
+    right: 15px !important;
+    padding: 12px 22px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* 🖥️ RESPONSIVO - Desktop grande */
+@media (min-width: 1200px) {
+  .install-pwa-button {
+    bottom: 30px !important;
+    right: 30px !important;
+    padding: 16px 32px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* 🌙 Modo escuro */
+body.dark-mode .install-pwa-button {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
+}
+
+body.dark-mode .install-pwa-button:hover {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;
+  box-shadow: 0 8px 25px rgba(96, 165, 250, 0.7) !important;
+}
+
+/* 🖨️ Esconde na impressão */
+@media print {
+  .install-pwa-button {
+    display: none !important;
+  }
+}
+</style>
+
+</body>
+</html>
+</body>
+</html>
+
